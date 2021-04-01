@@ -61,10 +61,23 @@
               </a>
             </li>
 
-            <md-list-item href="#/user">
+            <!-- <md-list-item href="#/user">
               <i class="material-icons">person</i>
               <p class="hidden-lg hidden-md">Profile</p>
+            </md-list-item> -->
+
+            <md-list-item v-if="!loggedIn" href="#/login">
+              <i class="material-icons">login</i>
             </md-list-item>
+            <md-list-item v-else @click="logout">
+              <i class="material-icons">logout</i>
+            </md-list-item>
+            <!-- <md-list-item v-if="!loggedIn" href="#/register">
+              <i class="material-icons">person</i>
+            </md-list-item>
+            <md-list-item v-else href="#/my-profile">
+              <p>{{ this.$store.state.user.account }}</p>
+            </md-list-item> -->
           </md-list>
         </div>
       </div>
@@ -73,7 +86,11 @@
 </template>
 
 <script>
+  import { authComputed } from "../../store/helpers";
   export default {
+    computed: {
+      ...authComputed,
+    },
     data() {
       return {
         selectedEmployee: null,
@@ -83,6 +100,9 @@
     methods: {
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+      },
+      logout() {
+        this.$store.dispatch("logout");
       },
     },
   };
