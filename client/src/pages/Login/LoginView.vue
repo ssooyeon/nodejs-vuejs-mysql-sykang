@@ -4,7 +4,7 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <p class="headline">Login</p>
         <div>
-          <v-form ref="form" lazy-validation>
+          <v-form ref="form" class="login-form" lazy-validation>
             <v-text-field v-model="loginForm.account" :rules="[(v) => !!v || 'account is required']" label="Account" required></v-text-field>
             <v-text-field
               type="password"
@@ -33,18 +33,31 @@
       };
     },
     methods: {
+      validate() {
+        this.$refs.form.validate();
+      },
       login() {
-        this.$store
-          .dispatch("login", {
-            account: this.loginForm.account,
-            password: this.loginForm.password,
-          })
-          .then(() => {
-            this.$router.push({ name: "Dashboard" });
-          });
+        const valid = this.$refs.form.validate();
+        if (valid) {
+          this.$store
+            .dispatch("login", {
+              account: this.loginForm.account,
+              password: this.loginForm.password,
+            })
+            .then(() => {
+              this.$router.push("/");
+              location.reload();
+            });
+        }
       },
     },
   };
 </script>
 
-<style scoped></style>
+<style>
+  form.login-form .error--text {
+    color: #ff5252 !important;
+    caret-color: #ff5252 !important;
+    font-weight: 500;
+  }
+</style>

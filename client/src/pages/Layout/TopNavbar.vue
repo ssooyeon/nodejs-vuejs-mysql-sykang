@@ -22,24 +22,6 @@
               <i class="material-icons">dashboard</i>
               <p class="hidden-lg hidden-md">Dashboard</p>
             </md-list-item>
-
-            <!-- <md-list-item href="#/notifications" class="dropdown">
-              <drop-down>
-                <a slot="title" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="material-icons">notifications</i>
-                  <span class="notification">5</span>
-                  <p class="hidden-lg hidden-md">Notifications</p>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <li><a href="#">Mike John responded to your email</a></li>
-                  <li><a href="#">You have 5 new tasks</a></li>
-                  <li><a href="#">You're now friend with Andrew</a></li>
-                  <li><a href="#">Another Notification</a></li>
-                  <li><a href="#">Another One</a></li>
-                </ul>
-              </drop-down>
-            </md-list-item> -->
-
             <li class="md-list-item">
               <a class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
@@ -61,23 +43,19 @@
               </a>
             </li>
 
-            <!-- <md-list-item href="#/user">
-              <i class="material-icons">person</i>
-              <p class="hidden-lg hidden-md">Profile</p>
-            </md-list-item> -->
-
             <md-list-item v-if="!loggedIn" href="#/login">
-              <i class="material-icons">login</i>
+              <div>LOGIN</div>
             </md-list-item>
-            <md-list-item v-else @click="logout">
-              <i class="material-icons">logout</i>
-            </md-list-item>
-            <!-- <md-list-item v-if="!loggedIn" href="#/register">
+            <md-list-item v-else href="#/user" @click="logout">
               <i class="material-icons">person</i>
+              <div>{{ loggedUserName }}</div>
             </md-list-item>
-            <md-list-item v-else href="#/my-profile">
-              <p>{{ this.$store.state.user.account }}</p>
-            </md-list-item> -->
+            <md-list-item v-if="!loggedIn" href="#/register">
+              <div>REGISTER</div>
+            </md-list-item>
+            <md-list-item v-else href="#" @click="logout">
+              <div>LOGOUT</div>
+            </md-list-item>
           </md-list>
         </div>
       </div>

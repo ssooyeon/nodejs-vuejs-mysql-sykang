@@ -16,6 +16,7 @@ exports.create = (req, res) => {
   const hash = bcrypt.hashSync(req.body.password, salt);
   const user = {
     account: req.body.account,
+    email: req.body.email,
     password: hash,
   };
   User.create(user)

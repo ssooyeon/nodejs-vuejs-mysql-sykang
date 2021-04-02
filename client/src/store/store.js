@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-// import router from "./router";
 import UserService from "../services/UserService";
 
 Vue.use(Vuex);
@@ -40,6 +39,9 @@ export const store = new Vuex.Store({
   getters: {
     loggedIn(state) {
       return !!state.user;
+    },
+    loggedUserName(state) {
+      return state.user.data.account;
     },
   },
 });
