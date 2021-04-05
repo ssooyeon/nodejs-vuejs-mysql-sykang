@@ -14,8 +14,13 @@
         type: Object,
         default: null,
       },
+      onRefreshFunction: {
+        type: Function,
+        default: null,
+      },
     },
     mounted() {
+      this.options.scales.xAxes[0].realtime.onRefresh = this.onRefreshFunction;
       this.renderChart(this.chartdata, this.options);
     },
   };

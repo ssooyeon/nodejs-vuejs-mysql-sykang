@@ -2,84 +2,134 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-        <line-chart-card :chartdata="cpuChart.data" :options="cpuChart.options" data-background-color="blue"> </line-chart-card>
+        <line-chart-card :chartdata="cpuChart.data" :options="defaultOptions" :onRefreshFunction="cpuChart.onRefreshFunction"> </line-chart-card>
       </div>
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-        <line-chart-card :chartdata="memChart.data" :options="memChart.options" data-background-color="blue"> </line-chart-card>
+        <line-chart-card :chartdata="memChart.data" :options="defaultOptions" :onRefreshFunction="memChart.onRefreshFunction"> </line-chart-card>
       </div>
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-        <line-chart-card :chartdata="diskChart.data" :options="diskChart.options" data-background-color="blue"> </line-chart-card>
+        <line-chart-card :chartdata="diskChart.data" :options="defaultOptions" :onRefreshFunction="diskChart.onRefreshFunction"> </line-chart-card>
       </div>
 
-      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
+      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
         <stats-card data-background-color="green">
           <template slot="header">
             <md-icon>store</md-icon>
           </template>
           <template slot="content">
-            <p class="category">Usage</p>
+            <p class="category category-cpu">CPU Usage</p>
             <h3 class="title">
-              34.33
+              {{ cpuPerCentage }}
               <small>%</small>
             </h3>
           </template>
           <template slot="footer">
             <div class="stats">
-              <md-icon>date_range</md-icon>
-              Lastest: 2021-04-01 17:47:12
+              <md-icon>update</md-icon>
+              Just Updated
             </div>
           </template>
         </stats-card>
       </div>
-      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
+      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
         <stats-card data-background-color="orange">
           <template slot="header">
             <md-icon>content_copy</md-icon>
           </template>
           <template slot="content">
-            <p class="category">Speed</p>
+            <p class="category category-cpu">CPU Speed</p>
             <h3 class="title">
-              5.42
-              <small>GB</small>
+              {{ cpuSpeed.value }}
+              <small>{{ cpuSpeed.unit }}Hz </small>
             </h3>
           </template>
           <template slot="footer">
             <div class="stats">
-              <md-icon class="text-danger">warning</md-icon>
-              <a href="#pablo">Get More Space...</a>
+              <md-icon>update</md-icon>
+              Just Updated
             </div>
           </template>
         </stats-card>
       </div>
 
-      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
+      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
         <stats-card data-background-color="red">
           <template slot="header">
             <md-icon>info_outline</md-icon>
           </template>
 
           <template slot="content">
-            <p class="category">Fixed Issues</p>
-            <h3 class="title">75</h3>
+            <p class="category category-mem">Memory Usage</p>
+            <h3 class="title">
+              {{ memPerCentage }}
+              <small>%</small>
+            </h3>
           </template>
 
           <template slot="footer">
             <div class="stats">
-              <md-icon>local_offer</md-icon>
-              Tracked from Github
+              <md-icon>update</md-icon>
+              Just Updated
             </div>
           </template>
         </stats-card>
       </div>
-      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
+      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
         <stats-card data-background-color="blue">
           <template slot="header">
             <i class="fab fa-twitter"></i>
           </template>
 
           <template slot="content">
-            <p class="category">Folowers</p>
-            <h3 class="title">+245</h3>
+            <p class="category category-mem">Memory Free Space</p>
+            <h3 class="title">
+              {{ memFree.value }}
+              <small>{{ memFree.unit }}B</small>
+            </h3>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>update</md-icon>
+              Just Updated
+            </div>
+          </template>
+        </stats-card>
+      </div>
+      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
+        <stats-card data-background-color="blue">
+          <template slot="header">
+            <i class="fab fa-twitter"></i>
+          </template>
+
+          <template slot="content">
+            <p class="category category-disk">Disk Usage</p>
+            <h3 class="title">
+              {{ diskPerCentage }}
+              <small>%</small>
+            </h3>
+          </template>
+
+          <template slot="footer">
+            <div class="stats">
+              <md-icon>update</md-icon>
+              Just Updated
+            </div>
+          </template>
+        </stats-card>
+      </div>
+      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
+        <stats-card data-background-color="blue">
+          <template slot="header">
+            <i class="fab fa-twitter"></i>
+          </template>
+
+          <template slot="content">
+            <p class="category category-disk">Disk Free Space</p>
+            <h3 class="title">
+              {{ diskFree.value }}
+              <small>{{ diskFree.unit }}B</small>
+            </h3>
           </template>
 
           <template slot="footer">
@@ -105,133 +155,79 @@
     },
     data() {
       return {
+        cpuPerCentage: 0,
+        cpuSpeed: {
+          value: 0,
+          unit: "",
+        },
+        memPerCentage: 0,
+        memFree: {
+          value: 0,
+          unit: "",
+        },
+        diskPerCentage: 0,
+        diskFree: {
+          value: 0,
+          unit: "",
+        },
+        defaultOptions: {
+          maintainAspectRatio: false,
+          events: ["click"],
+          plugins: {
+            datalabels: {
+              display: false,
+            },
+          },
+          scales: {
+            xAxes: [
+              {
+                type: "time",
+                time: {
+                  unit: "second",
+                  displayFormats: {
+                    second: "HH:mm:ss",
+                  },
+                },
+                realtime: {},
+                barPercentage: 0.5,
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  suggestedMin: 0,
+                  suggestedMax: 100,
+                  stepSize: 20,
+                },
+              },
+            ],
+          },
+          legend: {
+            display: false,
+          },
+        },
         cpuChart: {
           data: {
             datasets: [
               {
                 data: [],
-                // borderColor: "rgb(234, 73, 73)",
-                // backgroundColor: "rgba(234, 73, 73, 0.4)",
+                borderColor: "rgb(234, 73, 73)",
+                backgroundColor: "rgba(234, 73, 73, 0.4)",
                 value: 0,
               },
             ],
           },
-          options: {
-            maintainAspectRatio: false,
-            events: ["click"],
-            plugins: {
-              datalabels: {
-                display: false,
-              },
-            },
-            scales: {
-              xAxes: [
-                {
-                  type: "time",
-                  time: {
-                    unit: "second",
-                    displayFormats: {
-                      second: "HH:mm:ss",
-                    },
-                  },
-                  realtime: {
-                    onRefresh: function(chart) {
-                      MonitoringService.getCPU()
-                        .then((res) => {
-                          const cpu = res.data;
-                          chart.data.datasets.forEach(function(dataset) {
-                            dataset.data.push({
-                              x: Date.now(),
-                              y: cpu,
-                            });
-                          });
-                        })
-                        .catch((e) => {
-                          console.log(e);
-                        });
-                    },
-                  },
-                  barPercentage: 0.5,
-                },
-              ],
-              yAxes: [
-                {
-                  ticks: {
-                    suggestedMin: 0,
-                    suggestedMax: 100,
-                    stepSize: 20,
-                  },
-                },
-              ],
-            },
-            legend: {
-              display: false,
-            },
-          },
         },
-
         memChart: {
           data: {
             datasets: [
               {
                 data: [],
-                // borderColor: "rgb(234, 73, 73)",
-                // backgroundColor: "rgba(234, 73, 73, 0.4)",
+                borderColor: "rgb(138, 92, 126)",
+                backgroundColor: "rgba(138, 92, 126, 0.4)",
                 value: 0,
               },
             ],
-          },
-          options: {
-            maintainAspectRatio: false,
-            events: ["click"],
-            plugins: {
-              datalabels: {
-                display: false,
-              },
-            },
-            scales: {
-              xAxes: [
-                {
-                  type: "time",
-                  time: {
-                    unit: "second",
-                    displayFormats: {
-                      second: "HH:mm:ss",
-                    },
-                  },
-                  realtime: {
-                    onRefresh: function(chart) {
-                      MonitoringService.getMemory()
-                        .then((res) => {
-                          const mem = res.data;
-                          chart.data.datasets.forEach(function(dataset) {
-                            dataset.data.push({
-                              x: Date.now(),
-                              y: mem,
-                            });
-                          });
-                        })
-                        .catch((e) => {
-                          console.log(e);
-                        });
-                    },
-                  },
-                  barPercentage: 0.5,
-                },
-              ],
-              yAxes: [
-                {
-                  ticks: {
-                    suggestedMin: 0,
-                    suggestedMax: 100,
-                    stepSize: 20,
-                  },
-                },
-              ],
-            },
-            legend: {
-              display: false,
-            },
           },
         },
         diskChart: {
@@ -239,67 +235,157 @@
             datasets: [
               {
                 data: [],
-                // borderColor: "rgb(234, 73, 73)",
-                // backgroundColor: "rgba(234, 73, 73, 0.4)",
+                borderColor: "rgb(102, 179, 117)",
+                backgroundColor: "rgba(102, 179, 117, 0.4)",
                 value: 0,
               },
             ],
           },
-          options: {
-            maintainAspectRatio: false,
-            events: ["click"],
-            plugins: {
-              datalabels: {
-                display: false,
-              },
-            },
-            scales: {
-              xAxes: [
-                {
-                  type: "time",
-                  time: {
-                    unit: "second",
-                    displayFormats: {
-                      second: "HH:mm:ss",
-                    },
-                  },
-                  realtime: {
-                    onRefresh: function(chart) {
-                      MonitoringService.getDisk()
-                        .then((res) => {
-                          const disk = res.data;
-                          chart.data.datasets.forEach(function(dataset) {
-                            dataset.data.push({
-                              x: Date.now(),
-                              y: disk,
-                            });
-                          });
-                        })
-                        .catch((e) => {
-                          console.log(e);
-                        });
-                    },
-                  },
-                  barPercentage: 0.5,
-                },
-              ],
-              yAxes: [
-                {
-                  ticks: {
-                    suggestedMin: 0,
-                    suggestedMax: 100,
-                    stepSize: 20,
-                  },
-                },
-              ],
-            },
-            legend: {
-              display: false,
-            },
-          },
         },
       };
     },
-    methods: {},
+    methods: {
+      updateCpuDataSet: function(chart) {
+        setInterval(
+          function() {
+            MonitoringService.getCPUUsage()
+              .then((res) => {
+                const cpu = res.data;
+                this.cpuPerCentage = cpu.toFixed(4);
+                chart.data.datasets.forEach(function(dataset) {
+                  dataset.data.push({
+                    x: Date.now(),
+                    y: cpu,
+                  });
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }.bind(this),
+          1000
+        );
+      },
+      updateMemDataSet: function(chart) {
+        setInterval(
+          function() {
+            MonitoringService.getMemoryUsage()
+              .then((res) => {
+                const mem = res.data;
+                this.memPerCentage = mem.toFixed(4);
+                chart.data.datasets.forEach(function(dataset) {
+                  dataset.data.push({
+                    x: Date.now(),
+                    y: mem,
+                  });
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }.bind(this),
+          1000
+        );
+      },
+      updateDiskDataSet: function(chart) {
+        setInterval(
+          function() {
+            MonitoringService.getDiskUsage()
+              .then((res) => {
+                const disk = res.data;
+                this.diskPerCentage = disk.toFixed(4);
+                chart.data.datasets.forEach(function(dataset) {
+                  dataset.data.push({
+                    x: Date.now(),
+                    y: disk,
+                  });
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }.bind(this),
+          1000
+        );
+      },
+      updateCPUSpeed: function() {
+        setInterval(
+          function() {
+            MonitoringService.getCPUSpeed()
+              .then((res) => {
+                const speed = res.data;
+                this.cpuSpeed = {
+                  value: speed.value,
+                  unit: speed.unit,
+                };
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }.bind(this),
+          1000
+        );
+      },
+      updateMemFreeSpace: function() {
+        setInterval(
+          function() {
+            MonitoringService.getMemoryFreeSpace()
+              .then((res) => {
+                const free = res.data;
+                this.memFree = {
+                  value: free.value,
+                  unit: free.unit,
+                };
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }.bind(this),
+          1000
+        );
+      },
+      updateDiskFreeSpace: function() {
+        setInterval(
+          function() {
+            MonitoringService.getDiskFreeSpace()
+              .then((res) => {
+                const free = res.data;
+                this.diskFree = {
+                  value: free.value,
+                  unit: free.unit,
+                };
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }.bind(this),
+          1000
+        );
+      },
+    },
+    mounted() {
+      this.updateCpuDataSet(this.cpuChart);
+      this.updateMemDataSet(this.memChart);
+      this.updateDiskDataSet(this.diskChart);
+      this.updateCPUSpeed();
+      this.updateMemFreeSpace();
+      this.updateDiskFreeSpace();
+    },
   };
 </script>
+
+<style scoped>
+  .md-layout-item.md-size-custom-16 {
+    min-width: 16.6%;
+    max-width: 16.6%;
+  }
+  .category-cpu {
+    color: #ea4949 !important;
+  }
+  .category-mem {
+    color: #8a5c7e !important;
+  }
+  .category-disk {
+    color: #66b375 !important;
+  }
+</style>

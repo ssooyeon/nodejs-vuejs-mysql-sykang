@@ -1,16 +1,28 @@
 import http from "../http-common";
 
 class MonitoringService {
-  getCPU() {
-    return http.get("/monitoring/cpu");
+  getCPUUsage() {
+    return http.get("/monitoring/cpu/usage");
   }
 
-  getMemory() {
-    return http.get("/monitoring/memory");
+  getCPUSpeed() {
+    return http.get("/monitoring/cpu/speed");
   }
 
-  getDisk() {
-    return http.get("/monitoring/disk");
+  getMemoryUsage() {
+    return http.get("/monitoring/memory/usage");
+  }
+
+  getMemoryFreeSpace() {
+    return http.get("/monitoring/memory/freeSpace");
+  }
+
+  getDiskUsage() {
+    return http.get("/monitoring/disk/usage");
+  }
+
+  getDiskFreeSpace() {
+    return http.get("/monitoring/disk/freeSpace");
   }
 }
 
