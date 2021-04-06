@@ -26,7 +26,8 @@ class UserService {
   }
 
   findByAccount(account) {
-    return http.get(`/users?account=${account}`);
+    console.log(`account: ${account}`);
+    return http.get(`/users/account/${account}`);
   }
 
   getAuthLogin(data) {

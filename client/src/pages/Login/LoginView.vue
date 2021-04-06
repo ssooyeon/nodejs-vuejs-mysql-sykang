@@ -2,60 +2,66 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <p class="headline">Login</p>
-        <div>
-          <v-form ref="form" class="login-form" lazy-validation>
-            <v-text-field v-model="loginForm.account" :rules="[(v) => !!v || 'account is required']" label="Account" required></v-text-field>
-            <v-text-field
-              type="password"
-              v-model="loginForm.password"
-              :rules="[(v) => !!v || 'Password is reuired']"
-              label="Password"
-              required
-            ></v-text-field>
-          </v-form>
-          <md-button type="submit" class="md-raised md-success" @click="login">Submit</md-button>
-        </div>
+        <v-layout align-center="align-center" justify-center="justify-center">
+          <v-flex class="login-form text-xs-center">
+            <div v-if="isLoginView" class="display-4 mb-3"><v-icon class="mr-2" large="large">work</v-icon> Login</div>
+            <div v-else class="display-4 mb-3"><v-icon class="mr-2" large="large">work</v-icon> Register</div>
+            <v-card light="light">
+              <v-card-text>
+                <div class="subheading">
+                  <template v-if="isLoginView">Log in to your customer portal</template>
+                  <template v-else>Crate a new account</template>
+                </div>
+                <login-form v-if="isLoginView"></login-form>
+                <register-form v-else @registerDone="setLoginView"></register-form>
+              </v-card-text>
+            </v-card>
+            <div v-if="isLoginView" class="mt-3">
+              Don't have an account?
+              <v-btn light="light" class="ml-2" @click="isLogin">Sign up</v-btn>
+            </div>
+            <div v-else class="mt-3">
+              Do already have an account?
+              <v-btn light="light" class="ml-2" @click="isLogin">Sign in</v-btn>
+            </div>
+          </v-flex>
+        </v-layout>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { LoginForm, RegisterForm } from "@/pages";
+
   export default {
     name: "login",
+    components: {
+      LoginForm,
+      RegisterForm,
+    },
     data() {
       return {
-        loginForm: {
-          account: "",
-          password: "",
-        },
+        isLoginView: true,
       };
     },
     methods: {
-      validate() {
-        this.$refs.form.validate();
+      isLogin: function() {
+        this.isLoginView = !this.isLoginView;
       },
-      login() {
-        const valid = this.$refs.form.validate();
-        if (valid) {
-          this.$store
-            .dispatch("login", {
-              account: this.loginForm.account,
-              password: this.loginForm.password,
-            })
-            .then(() => {
-              this.$router.push("/");
-              location.reload();
-            });
-        }
+      setLoginView: function(isLoginView) {
+        this.isLoginView = isLoginView;
       },
     },
   };
 </script>
 
 <style>
-  form.login-form .error--text {
+  .text-xs-center {
+    text-align: center;
+  }
+  form.login-form .error--text,
+  form.register-form .error--text {
     color: #ff5252 !important;
     caret-color: #ff5252 !important;
     font-weight: 500;

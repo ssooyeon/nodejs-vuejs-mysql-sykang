@@ -50,10 +50,7 @@
               <i class="material-icons">person</i>
               <div>{{ loggedUserName }}</div>
             </md-list-item>
-            <md-list-item v-if="!loggedIn" href="#/register">
-              <div>REGISTER</div>
-            </md-list-item>
-            <md-list-item v-else href="#" @click="logout">
+            <md-list-item v-if="loggedIn" href="#" @click="logout">
               <div>LOGOUT</div>
             </md-list-item>
           </md-list>

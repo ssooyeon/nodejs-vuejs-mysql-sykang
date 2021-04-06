@@ -52,8 +52,8 @@ exports.findOne = (req, res) => {
     });
 };
 
-exports.findOneAccount = (req, res) => {
-  const account = req.query.account;
+exports.findByAccount = (req, res) => {
+  const account = req.params.account;
   User.findOne({ where: { account: account } })
     .then((data) => {
       res.send(data);

@@ -8,7 +8,7 @@
             <v-text-field v-model="tutorial.title" :rules="[(v) => !!v || 'Title is required']" label="Title" required></v-text-field>
             <v-text-field
               v-model="tutorial.description"
-              :rules="[(v) => !!v || 'Description is reuired']"
+              :rules="[(v) => !!v || 'Description is required']"
               label="Description"
               required
             ></v-text-field>
