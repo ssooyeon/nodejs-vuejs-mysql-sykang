@@ -66,8 +66,28 @@ exports.findByAccount = (req, res) => {
 //////////////////////////////////
 // update
 //////////////////////////////////
+exports.compareCurrentPassword = (req, res) => {
+  const id = req.body.id;
+  const password = req.body.password;
+  if (password) {
+    User.findByPk(id)
+      .then((data) => {
+        const compare = bcrypt.compareSync(password, data.password);
+        res.send(compare);
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err.message || "Incorrect current password." });
+      });
+  }
+};
+
 exports.update = (req, res) => {
   const id = req.params.id;
+  if (req.body.password !== undefined) {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+    req.body.password = hash;
+  }
   User.update(req.body, { where: { id: id } })
     .then((num) => {
       if (num === 1) {
@@ -121,12 +141,16 @@ exports.authLogin = (req, res) => {
         const compare = bcrypt.compareSync(password, data.password);
         if (compare) {
           const userInfo = {
+            id: data.id,
             account: account,
+            email: data.email,
           };
           const token = jwt.sign({ userInfo }, "the_secret_key");
           res.json({
             token,
+            id: userInfo.id,
             account: userInfo.account,
+            email: userInfo.email,
           });
         }
       })

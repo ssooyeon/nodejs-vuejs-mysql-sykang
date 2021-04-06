@@ -17,6 +17,9 @@ export const store = new Vuex.Store({
       localStorage.setItem("user", JSON.stringify(userData));
       axios.defaults.headers.common["Authorization"] = `Bearer ${userData.token}`;
     },
+    UPDATE_USER_DATA(state, user) {
+      state.user.data.email = user.email;
+    },
     LOGOUT() {
       localStorage.removeItem("user");
       location.reload();
@@ -35,13 +38,20 @@ export const store = new Vuex.Store({
     logout({ commit }) {
       commit("LOGOUT");
     },
+    // updateUserData({ commit }, user) {
+    //   commit("UPDATE_USER_DATA", user);
+    // },
   },
   getters: {
     loggedIn(state) {
       return !!state.user;
     },
-    loggedUserName(state) {
-      return state.user.data.account;
+    loggedUserInfo(state) {
+      return {
+        id: state.user.data.id,
+        account: state.user.data.account,
+        email: state.user.data.email,
+      };
     },
   },
 });

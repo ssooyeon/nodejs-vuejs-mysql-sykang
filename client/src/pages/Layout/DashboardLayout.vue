@@ -13,6 +13,10 @@
         <md-icon>content_paste</md-icon>
         <p>Table list</p>
       </sidebar-link>
+      <sidebar-link to="/myProfile">
+        <md-icon>person</md-icon>
+        <p>My Profile</p>
+      </sidebar-link>
     </side-bar>
 
     <div class="main-panel">

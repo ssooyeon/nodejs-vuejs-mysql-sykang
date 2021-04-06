@@ -13,6 +13,10 @@ class UserService {
     return http.post("/users", data);
   }
 
+  compareCurrentPassword(data) {
+    return http.post("/users/compare/password", data);
+  }
+
   update(id, data) {
     return http.put(`/users/${id}`, data);
   }
@@ -26,7 +30,6 @@ class UserService {
   }
 
   findByAccount(account) {
-    console.log(`account: ${account}`);
     return http.get(`/users/account/${account}`);
   }
 

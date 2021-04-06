@@ -46,9 +46,9 @@
             <md-list-item v-if="!loggedIn" href="#/login">
               <div>LOGIN</div>
             </md-list-item>
-            <md-list-item v-else href="#/user" @click="logout">
+            <md-list-item v-else href="#/myProfile">
               <i class="material-icons">person</i>
-              <div>{{ loggedUserName }}</div>
+              <div>{{ loggedUserInfo.account }}</div>
             </md-list-item>
             <md-list-item v-if="loggedIn" href="#" @click="logout">
               <div>LOGOUT</div>

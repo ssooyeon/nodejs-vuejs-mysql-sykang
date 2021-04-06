@@ -6,6 +6,7 @@ import TutorialListView from "@/pages/TableList/TutorialListView.vue";
 import AddTutorialView from "@/pages/TableList/AddTutorialView.vue";
 import EditTutorialView from "@/pages/TableList/EditTutorialView.vue";
 import LoginView from "@/pages/Login/LoginView.vue";
+import MyProfile from "@/pages/MyProfile/MyProfileView.vue";
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
         path: "/table/tutorials/:id",
         name: "tutorial-details",
         component: EditTutorialView,
+      },
+      {
+        path: "/myprofile",
+        name: "my-profile",
+        component: MyProfile,
       },
       {
         path: "/login",

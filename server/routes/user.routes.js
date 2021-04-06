@@ -6,6 +6,7 @@ module.exports = (app) => {
   router.get("/", users.findAll);
   router.get("/:id", users.findOne);
   router.get("/account/:account", users.findByAccount);
+  router.post("/compare/password", users.compareCurrentPassword);
   router.put("/:id", users.update);
   router.delete("/:id", users.delete);
   router.delete("/", users.deleteAll);
