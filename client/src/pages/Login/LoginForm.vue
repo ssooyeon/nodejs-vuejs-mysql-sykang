@@ -14,6 +14,7 @@
 </template>
 
 <script>
+  import { mapActions } from "vuex";
   export default {
     name: "login-form",
     data() {
@@ -25,20 +26,29 @@
       };
     },
     methods: {
+      ...mapActions({ authLogin: "userStore/login" }),
       validate() {
         return this.$refs.form.validate();
       },
       login() {
         const valid = this.validate();
         if (valid) {
-          this.$store
-            .dispatch("login", {
-              account: this.user.account,
-              password: this.user.password,
-            })
+          const data = {
+            account: this.user.account,
+            password: this.user.password,
+          };
+          this.authLogin(data)
             .then(() => {
+              console.log("Welcome to my project!");
               this.$router.push("/");
               location.reload();
+            })
+            .catch(() => {
+              this.$fire({
+                title: "",
+                text: "Incorrect account and/or password.",
+                type: "error",
+              });
             });
         }
       },

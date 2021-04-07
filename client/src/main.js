@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import VueSimpleAlert from "vue-simple-alert";
 import App from "./App";
 import routes from "./router";
-import { store } from "./store/store";
+import { store } from "./store/index";
 import vuetify from "./plugins/vuetify";
 import GlobalComponents from "./globalComponents";
 import GlobalDirectives from "./globalDirectives";
@@ -34,11 +34,6 @@ new Vue({
     Chartist: Chartist,
   },
   created() {
-    const userString = localStorage.getItem("user");
-    if (userString) {
-      const userData = JSON.parse(userString);
-      this.$store.commit("SET_USER_DATA", userData);
-    }
     axios.interceptors.response.use(
       (response) => response,
       (error) => {

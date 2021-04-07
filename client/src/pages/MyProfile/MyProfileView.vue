@@ -11,9 +11,9 @@
                   <template>Edit my account information</template>
                 </div>
                 <v-form ref="form" class="my-profile-form" lazy-validation>
-                  <v-text-field v-model="user.account" label="Account" prepend-icon="person" disabled></v-text-field>
+                  <v-text-field v-model="userForm.account" label="Account" prepend-icon="person" disabled></v-text-field>
                   <v-text-field
-                    v-model="user.email"
+                    v-model="userForm.email"
                     :rules="[(v) => !!v || 'E-mail is required', (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid']"
                     light="light"
                     label="Email"
@@ -28,7 +28,7 @@
                   </div>
                   <v-text-field
                     type="password"
-                    v-model="user.currentPassword"
+                    v-model="userForm.currentPassword"
                     v-if="isPasswordChange"
                     :rules="[(v) => !!v || 'Password is required']"
                     label="Current password"
@@ -37,18 +37,18 @@
                   ></v-text-field>
                   <v-text-field
                     type="password"
-                    v-model="user.newPassword"
+                    v-model="userForm.newPassword"
                     v-if="isPasswordChange"
-                    :rules="[(v) => !!v || 'Password is required', this.user.currentPassword !== '' || 'Enter current password.']"
+                    :rules="[(v) => !!v || 'Password is required', this.userForm.currentPassword !== '' || 'Enter current password.']"
                     label="New password"
                     prepend-icon="lock"
                     required
                   ></v-text-field>
                   <v-text-field
                     type="password"
-                    v-model="user.newPasswordCheck"
+                    v-model="userForm.newPasswordCheck"
                     v-if="isPasswordChange"
-                    :rules="[(v) => !!v || 'Password is required', (v) => v === this.user.newPassword || 'Passwords mush match.']"
+                    :rules="[(v) => !!v || 'Password is required', (v) => v === this.userForm.newPassword || 'Passwords mush match.']"
                     label="Repeat New password"
                     prepend-icon="lock"
                     required
@@ -66,21 +66,20 @@
 
 <script>
   import UserService from "../../services/UserService";
-  import { authComputed } from "../../store/helpers";
+  import { mapState, mapActions } from "vuex";
   export default {
     name: "my-profile",
     computed: {
-      ...authComputed,
+      ...mapState("userStore", ["user"]),
     },
     mounted() {
-      console.log(this.count);
-      this.user.id = this.loggedUserInfo.id;
-      this.user.account = this.loggedUserInfo.account;
-      this.user.email = this.loggedUserInfo.email;
+      this.userForm.id = this.user.data.id;
+      this.userForm.account = this.user.data.account;
+      this.userForm.email = this.user.data.email;
     },
     data() {
       return {
-        user: {
+        userForm: {
           id: "",
           account: "",
           email: "",
@@ -92,6 +91,7 @@
       };
     },
     methods: {
+      ...mapActions({ updateUserState: "userStore/updateUserState" }),
       togglePasswordDiv: function() {
         this.isPasswordChange = !this.isPasswordChange;
       },
@@ -103,17 +103,17 @@
         if (validForm) {
           if (this.isPasswordChange) {
             const comparePassword = {
-              id: this.user.id,
-              password: this.user.currentPassword,
+              id: this.userForm.id,
+              password: this.userForm.currentPassword,
             };
             UserService.compareCurrentPassword(comparePassword)
               .then((compare) => {
                 if (compare.data) {
                   const data = {
-                    id: this.user.id,
-                    account: this.user.account,
-                    email: this.user.email,
-                    password: this.user.newPassword,
+                    id: this.userForm.id,
+                    account: this.userForm.account,
+                    email: this.userForm.email,
+                    password: this.userForm.newPassword,
                   };
                   this.edit(data);
                 } else {
@@ -129,9 +129,9 @@
               });
           } else {
             const data = {
-              id: this.user.id,
-              account: this.user.account,
-              email: this.user.email,
+              id: this.userForm.id,
+              account: this.userForm.account,
+              email: this.userForm.email,
             };
             this.edit(data);
           }
@@ -146,7 +146,7 @@
               type: "success",
               timer: 3000,
             }).then(() => {
-              // this.$store.dispatch("updateUserData", data);
+              this.updateUserState(data);
               this.$router.push("/");
             });
           })

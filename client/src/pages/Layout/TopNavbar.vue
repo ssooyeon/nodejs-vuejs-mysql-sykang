@@ -43,14 +43,14 @@
               </a>
             </li>
 
-            <md-list-item v-if="!loggedIn" href="#/login">
+            <md-list-item v-if="!user" href="#/login">
               <div>LOGIN</div>
             </md-list-item>
             <md-list-item v-else href="#/myProfile">
               <i class="material-icons">person</i>
-              <div>{{ loggedUserInfo.account }}</div>
+              <div>{{ user.data.account }}</div>
             </md-list-item>
-            <md-list-item v-if="loggedIn" href="#" @click="logout">
+            <md-list-item v-if="user" href="#" @click="logout">
               <div>LOGOUT</div>
             </md-list-item>
           </md-list>
@@ -61,10 +61,11 @@
 </template>
 
 <script>
-  import { authComputed } from "../../store/helpers";
+  import { mapState, mapActions } from "vuex";
+
   export default {
     computed: {
-      ...authComputed,
+      ...mapState("userStore", ["user"]),
     },
     data() {
       return {
@@ -73,11 +74,9 @@
       };
     },
     methods: {
+      ...mapActions({ logout: "userStore/logout" }),
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
-      },
-      logout() {
-        this.$store.dispatch("logout");
       },
     },
   };
