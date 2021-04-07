@@ -10,7 +10,7 @@
                 <div class="subheading">
                   <template>Edit my account information</template>
                 </div>
-                <v-form ref="form" class="my-profile-form" lazy-validation>
+                <v-form ref="form" class="my-profile-form" @submit.prevent lazy-validation>
                   <v-text-field v-model="userForm.account" label="Account" prepend-icon="person" disabled></v-text-field>
                   <v-text-field
                     v-model="userForm.email"

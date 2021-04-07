@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" class="login-form" lazy-validation>
+  <v-form ref="form" class="login-form" @submit.prevent lazy-validation>
     <v-row class="pl-3 pr-3">
       <v-text-field
         v-model="user.account"

@@ -3,7 +3,7 @@
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <p class="headline">Edit Tutorial</p>
-        <v-form ref="form" lazy-validation>
+        <v-form ref="form" @submit.prevent lazy-validation>
           <v-text-field v-model="currentTutorial.title" :rules="[(v) => !!v || 'Title is required.']" label="Title" required></v-text-field>
           <v-text-field
             v-model="currentTutorial.description"

@@ -18,7 +18,7 @@
             </md-autocomplete>
           </div>
           <md-list>
-            <md-list-item href="#/">
+            <md-list-item href="/">
               <i class="material-icons">dashboard</i>
               <p class="hidden-lg hidden-md">Dashboard</p>
             </md-list-item>
@@ -43,10 +43,10 @@
               </a>
             </li>
 
-            <md-list-item v-if="!user" href="#/login">
+            <md-list-item v-if="!user" href="/login">
               <div>LOGIN</div>
             </md-list-item>
-            <md-list-item v-else href="#/myProfile">
+            <md-list-item v-else href="/myProfile">
               <i class="material-icons">person</i>
               <div>{{ user.data.account }}</div>
             </md-list-item>

@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" class="login-form" lazy-validation>
+  <v-form ref="form" class="login-form" @submit.prevent lazy-validation>
     <v-text-field v-model="user.account" :rules="[(v) => !!v || 'account is required']" label="Account" prepend-icon="person" required></v-text-field>
     <v-text-field
       type="password"

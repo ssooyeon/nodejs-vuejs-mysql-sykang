@@ -12,6 +12,7 @@ import Chartist from "chartist";
 import axios from "axios";
 
 const router = new VueRouter({
+  mode: "history",
   routes,
   linkExactActiveClass: "nav-item active",
 });
