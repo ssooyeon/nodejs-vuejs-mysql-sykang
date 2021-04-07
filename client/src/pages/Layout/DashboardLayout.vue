@@ -13,7 +13,7 @@
         <md-icon>content_paste</md-icon>
         <p>Table list</p>
       </sidebar-link>
-      <sidebar-link to="/myProfile">
+      <sidebar-link v-if="user" to="/myProfile">
         <md-icon>person</md-icon>
         <p>My Profile</p>
       </sidebar-link>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+  import { mapState } from "vuex";
+
   import TopNavbar from "./TopNavbar.vue";
   import ContentFooter from "./ContentFooter.vue";
   import DashboardContent from "./Content.vue";
@@ -37,6 +39,9 @@
       TopNavbar,
       DashboardContent,
       ContentFooter,
+    },
+    computed: {
+      ...mapState("userStore", ["user"]),
     },
     data() {
       return {
