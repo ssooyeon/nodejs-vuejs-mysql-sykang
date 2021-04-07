@@ -14,9 +14,12 @@
 </template>
 
 <script>
-  import { mapActions } from "vuex";
+  import { mapState, mapActions } from "vuex";
   export default {
     name: "login-form",
+    computed: {
+      ...mapState("userStore", ["errorMessage"]),
+    },
     data() {
       return {
         user: {
@@ -39,11 +42,20 @@
           };
           this.authLogin(data)
             .then(() => {
-              console.log("Welcome to my project!");
-              this.$router.push("/");
-              location.reload();
+              if (this.errorMessage === "") {
+                console.log("Welcome to my project!");
+                this.$router.push("/");
+                location.reload();
+              } else {
+                this.$fire({
+                  title: "",
+                  text: this.errorMessage,
+                  type: "error",
+                });
+              }
             })
-            .catch(() => {
+            .catch((e) => {
+              console.log(e);
               this.$fire({
                 title: "",
                 text: "Incorrect account and/or password.",

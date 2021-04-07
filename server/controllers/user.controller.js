@@ -152,9 +152,11 @@ exports.authLogin = (req, res) => {
             account: userInfo.account,
             email: userInfo.email,
           });
+        } else {
+          res.json(null);
         }
       })
-      .catch((err) => {
+      .catch((e) => {
         res.status(500).send({ message: err.message || "Incorrect account and/or password." });
       });
   }

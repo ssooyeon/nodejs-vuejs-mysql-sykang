@@ -7,6 +7,7 @@ const getDefaultState = () => {
     token: "",
     role: "",
     user: "",
+    errorMessage: "",
   };
 };
 
@@ -15,6 +16,7 @@ export default {
   state: getDefaultState(),
   mutations: {
     SET_USER_STATE(state, userData) {
+      state.errorMessage = "";
       state.user = userData;
       axios.defaults.headers.common["Authorization"] = `Bearer ${userData.token}`;
     },
@@ -22,6 +24,9 @@ export default {
       state.user.data.email = user.email;
     },
     LOGOUT() {},
+    SET_ERROR_MESSAGE(state, message) {
+      state.errorMessage = message;
+    },
     RESET_STATE(state) {
       Object.assign(state, getDefaultState());
       location.reload();
@@ -30,7 +35,13 @@ export default {
   actions: {
     login({ commit }, credentials) {
       return UserService.getAuthLogin(credentials).then((res) => {
-        commit("SET_USER_STATE", res);
+        console.log(res);
+        if (res.data !== null) {
+          commit("SET_USER_STATE", res);
+        } else {
+          const message = "Incorrect account and/or password.";
+          commit("SET_ERROR_MESSAGE", message);
+        }
       });
     },
     updateUserState({ commit }, user) {
