@@ -14,7 +14,8 @@ import axios from "axios";
 const router = new VueRouter({
   mode: "history",
   routes,
-  linkExactActiveClass: "nav-item active",
+  // linkExactActiveClass: "nav-item active",
+  linkActiveClass: "nav-item active",
 });
 
 Vue.prototype.$Chartist = Chartist;
