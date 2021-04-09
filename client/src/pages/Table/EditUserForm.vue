@@ -1,8 +1,14 @@
 <template>
-  <v-form ref="form" class="edit-user-form" @submit.prevent lazy-validation>
-    <v-text-field v-model="user.account" :rules="[(v) => !!v || 'account is required']" label="Account" prepend-icon="person" desabled></v-text-field>
+  <v-form ref="form" class="edit-user-form" autocomplete="off" @submit.prevent lazy-validation>
     <v-text-field
-      v-model="user.email"
+      v-model="userForm.account"
+      :rules="[(v) => !!v || 'account is required']"
+      label="Account"
+      prepend-icon="person"
+      disabled
+    ></v-text-field>
+    <v-text-field
+      v-model="userForm.email"
       :rules="[(v) => !!v || 'E-mail is required', (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid']"
       light="light"
       label="Email"
@@ -10,46 +16,130 @@
       prepend-icon="email"
       required
     ></v-text-field>
+    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100 text-left mb-3">
+      <a v-if="isPasswordChange" class="md-list-item-container" @click="togglePasswordDiv"><md-icon>expand_more</md-icon> password change</a>
+      <a v-else class="md-list-item-container" @click="togglePasswordDiv"><md-icon>expand_less</md-icon> password change</a>
+    </div>
     <v-text-field
       type="password"
-      class="mb-3"
-      v-model="user.password"
+      v-model="userForm.newPassword"
+      v-if="isPasswordChange"
       :rules="[(v) => !!v || 'Password is required']"
-      label="Password"
+      label="New password"
       prepend-icon="lock"
       required
     ></v-text-field>
-    <md-button class="md-raised md-default" @click="closeFunction">Cancel</md-button>
+    <v-text-field
+      type="password"
+      v-model="userForm.newPasswordCheck"
+      v-if="isPasswordChange"
+      :rules="[(v) => !!v || 'Password is required', (v) => v === this.userForm.newPassword || 'Passwords mush match.']"
+      label="Repeat New password"
+      prepend-icon="lock"
+      required
+    ></v-text-field>
+    <md-button class="md-raised md-default" @click="[closeFunction(), resetForm()]">Cancel</md-button>
     <md-button type="submit" class="md-raised md-success float-right" @click="save">Save</md-button>
   </v-form>
 </template>
 
 <script>
+  import UserService from "../../services/UserService";
+
   export default {
     name: "edit-user-form",
+    created() {
+      this.initialize();
+    },
+    watch: {
+      editDialog(val) {
+        if (val) {
+          this.initialize();
+        }
+      },
+    },
     data() {
       return {
-        user: {
+        userForm: {
+          id: "",
           account: "",
           email: "",
-          password: "",
+          newPassword: "",
+          newPasswordCheck: "",
         },
+        isPasswordChange: false,
       };
     },
     props: {
+      editDialog: {
+        type: Boolean,
+        default: false,
+      },
+      editId: {
+        type: Number,
+        default: null,
+      },
       closeFunction: {
         type: Function,
         default: null,
       },
     },
     methods: {
+      togglePasswordDiv() {
+        this.isPasswordChange = !this.isPasswordChange;
+      },
+      initialize() {
+        UserService.get(this.editId)
+          .then((res) => {
+            this.userForm.id = res.data.id;
+            this.userForm.account = res.data.account;
+            this.userForm.email = res.data.email;
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
       validate() {
         return this.$refs.form.validate();
       },
       save() {
-        // const valid = this.validate();
-        // if (valid) {
-        // }
+        const valid = this.validate();
+        if (valid) {
+          let data = [];
+          if (this.isPasswordChange) {
+            data = {
+              id: this.userForm.id,
+              account: this.userForm.account,
+              email: this.userForm.email,
+              password: this.userForm.newPassword,
+            };
+          } else {
+            data = {
+              id: this.userForm.id,
+              account: this.userForm.account,
+              email: this.userForm.email,
+            };
+          }
+          UserService.update(data.id, data)
+            .then(() => {
+              this.$fire({
+                title: "",
+                text: "Update successfully.",
+                type: "success",
+              }).then(() => {
+                this.$emit("clicked-edit-submit", true);
+                this.resetForm();
+              });
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      },
+      resetForm() {
+        this.userForm = [];
+        this.$refs.form.reset();
+        this.$refs.form.resetValidation();
       },
     },
   };

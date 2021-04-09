@@ -2,9 +2,9 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <v-data-table :headers="headers" :items="users" sort-by="calories" class="v-data-table-user" data-app>
+        <v-data-table :headers="headers" :items="users" sort-by="createAt" class="v-data-table-user" data-app>
           <template v-slot:top>
-            <v-dialog v-model="addDialog" max-width="500px">
+            <v-dialog v-model="addDialog" max-width="500px" persistent>
               <template v-slot:activator="{ on, attrs }">
                 <md-button class="md-raised md-info ml-3" v-bind="attrs" v-on="on"><v-icon small class="mr-1">mdi-plus</v-icon>Add</md-button>
               </template>
@@ -13,17 +13,22 @@
                   <div class="subheading text-center mt-3 mb-4">
                     <template>Create new user information</template>
                   </div>
-                  <add-user-form :closeFunction="addDialogClose"></add-user-form>
+                  <add-user-form :closeFunction="addDialogClose" @clicked-add-submit="addItemDone"></add-user-form>
                 </v-card-text>
               </v-card>
             </v-dialog>
-            <v-dialog v-model="editDialog" max-width="500px">
+            <v-dialog v-model="editDialog" max-width="500px" persistent>
               <v-card>
                 <v-card-text>
                   <div class="subheading text-center mt-3 mb-4">
                     <template>Edit user information</template>
                   </div>
-                  <edit-user-form :closeFunction="editDialogClose"></edit-user-form>
+                  <edit-user-form
+                    :editDialog="editDialog"
+                    :editId="editId"
+                    :closeFunction="editDialogClose"
+                    @clicked-edit-submit="editItemDone"
+                  ></edit-user-form>
                 </v-card-text>
               </v-card>
             </v-dialog>
@@ -77,14 +82,9 @@
           { text: "Actions", value: "actions", sortable: false, class: "font-14" },
         ],
         users: [],
-        defaultItem: {
-          account: "",
-          email: "",
-        },
+        editId: null,
       };
     },
-    computed: {},
-    watch: {},
     created() {
       this.initialize();
     },
@@ -98,9 +98,21 @@
             console.log(e);
           });
       },
+      addItemDone(result) {
+        if (result) {
+          this.initialize();
+          this.addDialogClose();
+        }
+      },
       editItem(id) {
         this.editDialog = true;
-        console.log(id);
+        this.editId = id;
+      },
+      editItemDone(result) {
+        if (result) {
+          this.initialize();
+          this.editDialogClose();
+        }
       },
       deleteItem(id) {
         this.$fire({
@@ -112,6 +124,19 @@
           .then((res) => {
             if (res.value) {
               console.log(id);
+              UserService.delete(id)
+                .then(() => {
+                  this.$fire({
+                    title: "",
+                    text: "Delete successfully.",
+                    type: "success",
+                  }).then(() => {
+                    this.initialize();
+                  });
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
             }
           })
           .catch((e) => {
@@ -124,7 +149,6 @@
       editDialogClose() {
         this.editDialog = false;
       },
-      save() {},
     },
   };
 </script>
