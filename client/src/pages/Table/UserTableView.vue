@@ -2,7 +2,15 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <v-data-table :headers="headers" :items="users" sort-by="createAt" class="v-data-table-user" data-app>
+        <v-data-table
+          :headers="headers"
+          :items="users"
+          sort-by="createAt"
+          :search="search"
+          :custom-filter="filterText"
+          class="v-data-table-user"
+          data-app
+        >
           <template v-slot:top>
             <v-dialog v-model="addDialog" max-width="500px" persistent>
               <template v-slot:activator="{ on, attrs }">
@@ -32,6 +40,7 @@
                 </v-card-text>
               </v-card>
             </v-dialog>
+            <v-text-field v-model="search" label="Search (account)" class="mx-4"></v-text-field>
           </template>
 
           <template v-slot:item.actions="{ item }">
@@ -74,15 +83,26 @@
             align: "start",
             value: "id",
             sortable: false,
-            class: "font-14",
+            width: "10%",
           },
-          { text: "Account", value: "account", class: "font-14" },
-          { text: "E-mail", value: "email", class: "font-14" },
-          { text: "Create date", value: "createdAt", class: "font-14" },
-          { text: "Actions", value: "actions", sortable: false, class: "font-14" },
+          {
+            text: "Account",
+            value: "account",
+            width: "20%",
+            filter: (value) => {
+              if (!this.account) {
+                return true;
+              }
+              return value < parseInt(this.account);
+            },
+          },
+          { text: "E-mail", value: "email", width: "30%" },
+          { text: "Create date", value: "createdAt", width: "30%" },
+          { text: "Actions", value: "actions", sortable: false, width: "10%" },
         ],
         users: [],
         editId: null,
+        search: "",
       };
     },
     created() {
@@ -97,6 +117,9 @@
           .catch((e) => {
             console.log(e);
           });
+      },
+      filterText(value, search) {
+        return value !== null && search !== null && typeof value === "string" && value.toString().indexOf(search) !== -1;
       },
       addItemDone(result) {
         if (result) {
@@ -156,9 +179,6 @@
 <style scoped>
   .v-data-table-user {
     padding: 20px 20px 40px 20px !important;
-  }
-  .font-14 {
-    font-size: 14px !important;
   }
   .v-dialog .v-card {
     padding: 20px 40px 20px 40px;
