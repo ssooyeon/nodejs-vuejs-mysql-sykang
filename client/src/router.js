@@ -1,7 +1,8 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import UserProfileView from "@/pages/UserProfile/UserProfileView.vue";
-import TutorialListView from "@/pages/TableList/TutorialListView.vue";
+// import TutorialListView from "@/pages/TableList/TutorialListView.vue";
+import UserTableView from "@/pages/Table/UserTableView.vue";
 import AddTutorialView from "@/pages/TableList/AddTutorialView.vue";
 import EditTutorialView from "@/pages/TableList/EditTutorialView.vue";
 import LoginView from "@/pages/Login/LoginView.vue";
@@ -17,19 +18,24 @@ const routes = [
     children: [
       {
         path: "dashboard",
-        name: "Dashboard",
+        name: "dashboard",
         component: Dashboard,
       },
       {
         path: "user",
-        name: "User Profile",
+        name: "user-profile",
         component: UserProfileView,
       },
       {
         path: "table",
-        name: "tutorial-list",
-        component: TutorialListView,
+        name: "user-list",
+        component: UserTableView,
       },
+      // {
+      //   path: "table",
+      //   name: "tutorial-list",
+      //   component: TutorialListView,
+      // },
       {
         path: "/table/add-tutorial",
         name: "add-tutorial",

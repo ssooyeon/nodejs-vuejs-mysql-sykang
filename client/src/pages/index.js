@@ -5,5 +5,7 @@ import UserCard from "../pages/UserProfile/UserCard.vue";
 import EditProfileForm from "../pages/UserProfile/EditProfileForm.vue";
 import LoginForm from "../pages/Login/LoginForm";
 import RegisterForm from "../pages/Login/RegisterForm";
+import AddUserForm from "../pages/Table/AddUserForm";
+import EditUserForm from "../pages/Table/EditUserForm";
 
-export { UserCard, EditProfileForm, LoginForm, RegisterForm };
+export { UserCard, EditProfileForm, LoginForm, RegisterForm, AddUserForm, EditUserForm };

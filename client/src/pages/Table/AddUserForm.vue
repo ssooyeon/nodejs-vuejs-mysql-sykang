@@ -1,0 +1,77 @@
+<template>
+  <v-form ref="form" class="add-user-form" @submit.prevent lazy-validation>
+    <v-row class="pl-3 pr-3">
+      <v-text-field
+        v-model="user.account"
+        :rules="[(v) => !!v || 'account is required']"
+        label="Account"
+        prepend-icon="person"
+        required
+      ></v-text-field>
+      <md-button v-if="!isValidAccount" class="md-info md-sm md-small" @click="checkAccount">Check</md-button>
+      <md-icon class="md-info" v-else>check</md-icon>
+    </v-row>
+    <v-text-field
+      v-model="user.email"
+      :rules="[(v) => !!v || 'E-mail is required', (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid']"
+      light="light"
+      label="Email"
+      type="email"
+      prepend-icon="email"
+      required
+    ></v-text-field>
+    <v-text-field
+      type="password"
+      class="mb-3"
+      v-model="user.password"
+      :rules="[(v) => !!v || 'Password is required']"
+      label="Password"
+      prepend-icon="lock"
+      required
+    ></v-text-field>
+    <md-button class="md-raised md-default" @click="closeFunction">Cancel</md-button>
+    <md-button type="submit" class="md-raised md-success float-right" @click="save">Save</md-button>
+  </v-form>
+</template>
+
+<script>
+  export default {
+    name: "add-user-form",
+    data() {
+      return {
+        user: {
+          account: "",
+          email: "",
+          password: "",
+        },
+        checkDoneAccount: "",
+        isValidAccount: false,
+      };
+    },
+    props: {
+      closeFunction: {
+        type: Function,
+        default: null,
+      },
+    },
+    methods: {
+      checkAccount() {},
+      validate() {
+        return this.$refs.form.validate();
+      },
+      save() {
+        // const valid = this.validate();
+        // if (valid) {
+        // }
+      },
+    },
+  };
+</script>
+
+<style>
+  form.add-user-form .error--text {
+    color: #ff5252 !important;
+    caret-color: #ff5252 !important;
+    font-weight: 500;
+  }
+</style>
