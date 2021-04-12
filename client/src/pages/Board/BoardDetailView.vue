@@ -2,30 +2,26 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <md-button class="md-raised md-info" @click="viewEdit"><v-icon small class="mr-1">mdi-pencil</v-icon>Edit</md-button>
-        <md-button class="md-raised md-info" @click="deleteBoard"><v-icon small class="mr-1">mdi-delete</v-icon>Delete</md-button>
+        <md-button class="md-raised md-info" @click="viewEdit(currentBoard.id)"><v-icon small class="mr-1">mdi-pencil</v-icon>Edit</md-button>
+        <md-button class="md-raised md-info" @click="deleteBoard(currentBoard.id)"><v-icon small class="mr-1">mdi-delete</v-icon>Delete</md-button>
       </div>
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <stats-card class="none-header">
+        <stats-card class="none-header" v-model="currentBoard">
           <template slot="content">
-            <p class="category">by <strong>sykang</strong></p>
-            <h3 class="title">How Changes Are Tracked</h3>
+            <p class="category">
+              by <strong>{{ currentBoard.writer }}</strong>
+            </p>
+            <h3 class="title">{{ currentBoard.title }}</h3>
             <hr />
             <br />
             <h5 class="content">
-              When you pass a plain JavaScript object to a Vue instance as its data option, Vue will walk through all of its properties and convert
-              them to getter/setters using Object.defineProperty. This is an ES5-only and un-shimmable feature, which is why Vue doesn’t support IE8
-              and below. The getter/setters are invisible to the user, but under the hood they enable Vue to perform dependency-tracking and
-              change-notification when properties are accessed or modified. One caveat is that browser consoles format getter/setters differently when
-              converted data objects are logged, so you may want to install vue-devtools for a more inspection-friendly interface. Every component
-              instance has a corresponding watcher instance, which records any properties “touched” during the component’s render as dependencies.
-              Later on when a dependency’s setter is triggered, it notifies the watcher, which in turn causes the component to re-render.
+              {{ currentBoard.content }}
             </h5>
           </template>
           <template slot="footer">
             <div class="stats">
               <md-icon>update</md-icon>
-              2021.04.12 12:43:11 updated
+              {{ $moment(currentBoard.createdAt, "YYYY-MM-DD HH:mm:ss") }} updated
             </div>
           </template>
         </stats-card>
@@ -38,24 +34,74 @@
 </template>
 
 <script>
+  import BoardService from "../../services/BoardService";
   import { StatsCard } from "@/components";
   export default {
     name: "board-detail",
     components: {
       StatsCard,
     },
-    data() {
-      return {};
-    },
     created() {
-      this.initialize();
+      this.initialize(this.$route.params.id);
+    },
+    data() {
+      return {
+        currentBoard: {
+          id: "",
+          title: "",
+          content: "",
+          createdAt: "",
+          writer: "",
+        },
+      };
     },
     methods: {
-      initialize() {},
-      viewEdit() {
-        this.$router.push("/board/edit");
+      initialize(id) {
+        BoardService.get(id)
+          .then((res) => {
+            this.currentBoard = {
+              id: res.data.id,
+              title: res.data.title,
+              content: res.data.content,
+              createdAt: res.data.createdAt,
+              writer: res.data.user.account,
+            };
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       },
-      deleteBoard() {},
+      viewEdit(id) {
+        this.$router.push(`/board/edit/${id}`);
+      },
+      deleteBoard(id) {
+        this.$fire({
+          title: "",
+          text: "Are you sure delete this board?",
+          type: "warning",
+          showCancelButton: true,
+        })
+          .then((res) => {
+            if (res.value) {
+              BoardService.delete(id)
+                .then(() => {
+                  this.$fire({
+                    title: "",
+                    text: "Delete successfully.",
+                    type: "success",
+                  }).then(() => {
+                    this.back();
+                  });
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
       back() {
         this.$router.push("/board");
       },

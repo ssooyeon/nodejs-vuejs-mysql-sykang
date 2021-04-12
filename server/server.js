@@ -28,6 +28,7 @@ app.get("/", (req, res) => {
 require("./routes/tutorial.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/monitoring.routes")(app);
+require("./routes/board.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

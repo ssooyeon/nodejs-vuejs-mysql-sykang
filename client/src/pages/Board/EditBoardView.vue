@@ -12,11 +12,22 @@
                 </div>
                 <v-form ref="form" class="board-form" autocomplete="off" @submit.prevent lazy-validation>
                   <v-col cols="12" sm="12">
-                    <v-text-field v-model="boardForm.title" label="Title" required></v-text-field>
+                    <v-text-field v-model="boardForm.title" :rules="[(v) => !!v || 'title is required']" label="Title" required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="12">
-                    <v-textarea label="Content" auto-grow outlined rows="10" row-height="25" shaped required></v-textarea>
+                    <v-textarea
+                      v-model="boardForm.content"
+                      :rules="[(v) => !!v || 'content is required']"
+                      label="Content"
+                      auto-grow
+                      outlined
+                      rows="10"
+                      row-height="25"
+                      shaped
+                      required
+                    ></v-textarea>
                   </v-col>
+                  <md-button class="md-raised md-default float-left" @click="back">Back</md-button>
                   <md-button type="submit" class="md-raised md-success" @click="save">Save</md-button>
                 </v-form>
               </v-card-text>
@@ -29,6 +40,7 @@
 </template>
 
 <script>
+  import BoardService from "../../services/BoardService";
   export default {
     name: "edit-board",
     components: {},
@@ -38,22 +50,49 @@
           id: "",
           title: "",
           content: "",
-          writer: "",
         },
       };
     },
     created() {
-      this.initialize();
+      this.initialize(this.$route.params.id);
     },
     methods: {
-      initialize() {},
+      initialize(id) {
+        BoardService.get(id)
+          .then((res) => {
+            this.boardForm = {
+              id: res.data.id,
+              title: res.data.title,
+              content: res.data.content,
+            };
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
       validate() {
         return this.$refs.form.validate();
       },
       save() {
-        // const validForm = this.validate();
-        // if (validForm) {
-        // }
+        const validForm = this.validate();
+        if (validForm) {
+          BoardService.update(this.boardForm.id, this.boardForm)
+            .then(() => {
+              this.$fire({
+                title: "",
+                text: "Update successfully.",
+                type: "success",
+              }).then(() => {
+                this.$router.push("/board");
+              });
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      },
+      back() {
+        this.$router.push(`/board/${this.boardForm.id}`);
       },
     },
   };

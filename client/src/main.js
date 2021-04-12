@@ -10,6 +10,7 @@ import GlobalDirectives from "./globalDirectives";
 import MaterialDashboard from "./material-dashboard";
 import Chartist from "chartist";
 import axios from "axios";
+import VueMoment from "vue-moment";
 
 const router = new VueRouter({
   mode: "history",
@@ -25,6 +26,7 @@ Vue.use(VueSimpleAlert);
 Vue.use(MaterialDashboard);
 Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
+Vue.use(VueMoment);
 
 new Vue({
   el: "#app",

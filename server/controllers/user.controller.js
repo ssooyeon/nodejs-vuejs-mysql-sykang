@@ -37,7 +37,7 @@ exports.findAll = (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      res.status(500).send({ message: err.message || "Some error occurred while retrieving tutorials." });
+      res.status(500).send({ message: err.message || "Some error occurred while retrieving users." });
     });
 };
 
