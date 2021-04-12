@@ -38,8 +38,8 @@
       prepend-icon="lock"
       required
     ></v-text-field>
-    <md-button class="md-raised md-default" @click="[closeFunction(), resetForm()]">Cancel</md-button>
-    <md-button type="submit" class="md-raised md-success float-right" @click="save">Save</md-button>
+    <md-button type="submit" class="md-raised md-success" @click="save">Save</md-button>
+    <md-button class="md-raised md-default float-right" @click="[closeFunction(), resetForm()]">Cancel</md-button>
   </v-form>
 </template>
 

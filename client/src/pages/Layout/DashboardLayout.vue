@@ -9,8 +9,12 @@
         <md-icon>person</md-icon>
         <p>User Profile</p>
       </sidebar-link>
-      <sidebar-link to="/table">
+      <sidebar-link to="/board">
         <md-icon>content_paste</md-icon>
+        <p>Board</p>
+      </sidebar-link>
+      <sidebar-link to="/table">
+        <md-icon>list</md-icon>
         <p>Table list</p>
       </sidebar-link>
       <sidebar-link v-if="user" to="/myProfile">

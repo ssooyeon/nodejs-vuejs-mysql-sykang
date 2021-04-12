@@ -12,10 +12,7 @@
       </div>
 
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
-        <stats-card data-background-color="green">
-          <template slot="header">
-            <md-icon>store</md-icon>
-          </template>
+        <stats-card class="none-header">
           <template slot="content">
             <p class="category category-cpu">CPU Usage</p>
             <h3 class="title">
@@ -32,10 +29,7 @@
         </stats-card>
       </div>
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
-        <stats-card data-background-color="orange">
-          <template slot="header">
-            <md-icon>content_copy</md-icon>
-          </template>
+        <stats-card class="none-header">
           <template slot="content">
             <p class="category category-cpu">CPU Speed</p>
             <h3 class="title">
@@ -53,11 +47,7 @@
       </div>
 
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
-        <stats-card data-background-color="red">
-          <template slot="header">
-            <md-icon>info_outline</md-icon>
-          </template>
-
+        <stats-card class="none-header">
           <template slot="content">
             <p class="category category-mem">Memory Usage</p>
             <h3 class="title">
@@ -75,11 +65,7 @@
         </stats-card>
       </div>
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
-        <stats-card data-background-color="blue">
-          <template slot="header">
-            <i class="fab fa-twitter"></i>
-          </template>
-
+        <stats-card class="none-header">
           <template slot="content">
             <p class="category category-mem">Memory Free Space</p>
             <h3 class="title">
@@ -97,11 +83,7 @@
         </stats-card>
       </div>
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
-        <stats-card data-background-color="blue">
-          <template slot="header">
-            <i class="fab fa-twitter"></i>
-          </template>
-
+        <stats-card class="none-header">
           <template slot="content">
             <p class="category category-disk">Disk Usage</p>
             <h3 class="title">
@@ -119,11 +101,7 @@
         </stats-card>
       </div>
       <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-16">
-        <stats-card data-background-color="blue">
-          <template slot="header">
-            <i class="fab fa-twitter"></i>
-          </template>
-
+        <stats-card class="none-header">
           <template slot="content">
             <p class="category category-disk">Disk Free Space</p>
             <h3 class="title">
@@ -387,5 +365,11 @@
   }
   .category-disk {
     color: #66b375 !important;
+  }
+</style>
+
+<style>
+  .md-card-stats.none-header .md-card-header {
+    display: none;
   }
 </style>

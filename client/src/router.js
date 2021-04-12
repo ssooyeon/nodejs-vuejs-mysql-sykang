@@ -1,10 +1,14 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import UserProfileView from "@/pages/UserProfile/UserProfileView.vue";
-// import TutorialListView from "@/pages/TableList/TutorialListView.vue";
 import UserTableView from "@/pages/Table/UserTableView.vue";
-import AddTutorialView from "@/pages/TableList/AddTutorialView.vue";
-import EditTutorialView from "@/pages/TableList/EditTutorialView.vue";
+// import TutorialListView from "@/pages/TableList/TutorialListView.vue";
+// import AddTutorialView from "@/pages/TableList/AddTutorialView.vue";
+// import EditTutorialView from "@/pages/TableList/EditTutorialView.vue";
+import BoardView from "@/pages/Board/BoardView.vue";
+import AddBoardView from "@/pages/Board/AddBoardView.vue";
+import EditBoardView from "@/pages/Board/EditBoardView.vue";
+import BoardDetailView from "@/pages/Board/BoardDetailView.vue";
 import LoginView from "@/pages/Login/LoginView.vue";
 import MyProfile from "@/pages/MyProfile/MyProfileView.vue";
 
@@ -27,6 +31,26 @@ const routes = [
         component: UserProfileView,
       },
       {
+        path: "board",
+        name: "board",
+        component: BoardView,
+      },
+      {
+        path: "board/add",
+        name: "add-board",
+        component: AddBoardView,
+      },
+      {
+        path: "board/edit/:id",
+        name: "edit-board",
+        component: EditBoardView,
+      },
+      {
+        path: "board/:id",
+        name: "board-detail",
+        component: BoardDetailView,
+      },
+      {
         path: "table",
         name: "user-list",
         component: UserTableView,
@@ -36,16 +60,16 @@ const routes = [
       //   name: "tutorial-list",
       //   component: TutorialListView,
       // },
-      {
-        path: "/table/add-tutorial",
-        name: "add-tutorial",
-        component: AddTutorialView,
-      },
-      {
-        path: "/table/tutorials/:id",
-        name: "tutorial-details",
-        component: EditTutorialView,
-      },
+      // {
+      //   path: "/table/add-tutorial",
+      //   name: "add-tutorial",
+      //   component: AddTutorialView,
+      // },
+      // {
+      //   path: "/table/tutorials/:id",
+      //   name: "tutorial-details",
+      //   component: EditTutorialView,
+      // },
       {
         path: "/myprofile",
         name: "my-profile",
