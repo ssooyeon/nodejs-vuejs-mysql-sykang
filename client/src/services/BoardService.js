@@ -28,6 +28,10 @@ class UserService {
   findByTitle(title) {
     return http.get(`/boards/title/${title}`);
   }
+
+  findAllByTitle(title) {
+    return http.get(`/boards/all/title/${title}`);
+  }
 }
 
 export default new UserService();

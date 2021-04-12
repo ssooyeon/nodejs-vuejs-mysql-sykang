@@ -4,7 +4,22 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <md-button class="md-raised md-info" @click="viewAdd"><v-icon small class="mr-1">mdi-plus</v-icon>Add</md-button>
       </div>
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33" v-for="(item, index) in boards" :key="index">
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
+        <v-text-field v-model="search" label="Search (title)" class="mx-4" autocomplete="off" @keypress.enter="searchByTitle">
+          <template v-slot:append>
+            <md-button class="md-simple" @click="searchByTitle">
+              <v-icon small class="mr-1">search</v-icon>
+              Search
+            </md-button>
+          </template>
+        </v-text-field>
+      </div>
+      <div v-if="isEmpty" class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100 text-center">
+        <div>
+          <h4>empty.</h4>
+        </div>
+      </div>
+      <div v-else class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33" v-for="(item, index) in boards" :key="index">
         <stats-card class="none-header">
           <template slot="content">
             <p class="category">
@@ -26,6 +41,10 @@
         </stats-card>
       </div>
     </div>
+
+    <!-- <div class="text-center">
+      <v-pagination v-model="currentPage" :length="totalPages"></v-pagination>
+    </div> -->
   </div>
 </template>
 
@@ -40,6 +59,11 @@
     data() {
       return {
         boards: [],
+        // currentPage: 1,
+        // totalPages: 0,
+        // pageSize: 3,
+        search: "",
+        isEmpty: false,
       };
     },
     created() {
@@ -50,6 +74,11 @@
         BoardService.getAll()
           .then((res) => {
             this.boards = res.data.map(this.getDisplayBoard);
+            if (this.boards.length === 0) {
+              this.isEmpty = true;
+            } else {
+              this.isEmpty = false;
+            }
           })
           .catch((e) => {
             console.log(e);
@@ -69,6 +98,24 @@
       },
       viewDetail(id) {
         this.$router.push(`/board/${id}`);
+      },
+      searchByTitle() {
+        if (this.search === "") {
+          this.initialize();
+        } else {
+          BoardService.findAllByTitle(this.search)
+            .then((res) => {
+              this.boards = res.data.map(this.getDisplayBoard);
+              if (this.boards.length === 0) {
+                this.isEmpty = true;
+              } else {
+                this.isEmpty = false;
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
       },
     },
   };

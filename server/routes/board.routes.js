@@ -6,6 +6,7 @@ module.exports = (app) => {
   router.get("/", boards.findAll);
   router.get("/:id", boards.findOne);
   router.get("/title/:title", boards.findByTitle);
+  router.get("/all/title/:title", boards.findAllByTitle);
   router.put("/:id", boards.update);
   router.delete("/:id", boards.delete);
   router.delete("/", boards.deleteAll);

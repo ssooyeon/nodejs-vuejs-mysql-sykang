@@ -32,6 +32,7 @@ exports.findAll = (req, res) => {
         as: "user",
       },
     ],
+    order: [["createdAt", "DESC"]],
   })
     .then((data) => {
       res.send(data);
@@ -62,6 +63,29 @@ exports.findOne = (req, res) => {
 exports.findByTitle = (req, res) => {
   const title = req.params.title;
   Board.findOne({ where: { title: title } })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message || "Some error occurred retrieving boards." });
+    });
+};
+
+exports.findAllByTitle = (req, res) => {
+  const title = req.params.title;
+  Board.findAll({
+    include: [
+      {
+        model: User,
+        as: "user",
+      },
+    ],
+    where: {
+      title: {
+        [Op.like]: "%" + title + "%",
+      },
+    },
+  })
     .then((data) => {
       res.send(data);
     })
