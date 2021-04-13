@@ -5,9 +5,9 @@
         <md-button class="md-raised md-info" @click="viewAdd"><v-icon small class="mr-1">mdi-plus</v-icon>Add</md-button>
       </div>
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <v-text-field v-model="search" label="Search (title)" class="mx-4" autocomplete="off" @keypress.enter="searchByTitle">
+        <v-text-field v-model="search" label="Search (title)" class="mx-4" autocomplete="off" @keypress.enter="initialize">
           <template v-slot:append>
-            <md-button class="md-simple" @click="searchByTitle">
+            <md-button class="md-simple" @click="initialize">
               <v-icon small class="mr-1">search</v-icon>
               Search
             </md-button>
@@ -42,9 +42,9 @@
       </div>
     </div>
 
-    <!-- <div class="text-center">
-      <v-pagination v-model="currentPage" :length="totalPages"></v-pagination>
-    </div> -->
+    <div class="text-center">
+      <v-pagination v-model="currentPage" :length="totalPages" @input="handlePageChange"></v-pagination>
+    </div>
   </div>
 </template>
 
@@ -59,9 +59,9 @@
     data() {
       return {
         boards: [],
-        // currentPage: 1,
-        // totalPages: 0,
-        // pageSize: 3,
+        currentPage: 1,
+        totalPages: 0,
+        pageSize: 6,
         search: "",
         isEmpty: false,
       };
@@ -71,9 +71,11 @@
     },
     methods: {
       initialize() {
-        BoardService.getAll()
+        const params = this.getReqParams(this.search, this.currentPage, this.pageSize);
+        BoardService.getAll(params)
           .then((res) => {
-            this.boards = res.data.map(this.getDisplayBoard);
+            this.totalPages = Math.ceil(res.data.count / this.pageSize);
+            this.boards = res.data.rows.map(this.getDisplayBoard);
             if (this.boards.length === 0) {
               this.isEmpty = true;
             } else {
@@ -99,23 +101,22 @@
       viewDetail(id) {
         this.$router.push(`/board/${id}`);
       },
-      searchByTitle() {
-        if (this.search === "") {
-          this.initialize();
-        } else {
-          BoardService.findAllByTitle(this.search)
-            .then((res) => {
-              this.boards = res.data.map(this.getDisplayBoard);
-              if (this.boards.length === 0) {
-                this.isEmpty = true;
-              } else {
-                this.isEmpty = false;
-              }
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+      handlePageChange(value) {
+        this.currentPage = value;
+        this.initialize();
+      },
+      getReqParams(searchTitle, page, pageSize) {
+        let params = {};
+        if (searchTitle) {
+          params["title"] = searchTitle;
         }
+        if (page) {
+          params["page"] = page - 1;
+        }
+        if (pageSize) {
+          params["size"] = pageSize;
+        }
+        return params;
       },
     },
   };
@@ -130,5 +131,12 @@
   }
   h5.content {
     height: 150px;
+  }
+</style>
+
+<style>
+  .theme--light.v-pagination .v-pagination__item--active {
+    background: #1867c0 !important;
+    border-color: #1867c0 !important;
   }
 </style>

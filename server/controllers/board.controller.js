@@ -3,6 +3,12 @@ const Board = db.boards;
 const User = db.users;
 const Op = db.Sequelize.Op;
 
+const getPagination = (page, size) => {
+  const limit = size ? +size : 3;
+  const offset = page ? page * limit : 0;
+  return { limit, offset };
+};
+
 //////////////////////////////////
 // create
 //////////////////////////////////
@@ -25,14 +31,21 @@ exports.create = (req, res) => {
 // find
 //////////////////////////////////
 exports.findAll = (req, res) => {
-  Board.findAll({
+  const { page, size, title } = req.query;
+  const { limit, offset } = getPagination(page, size);
+  const condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  Board.findAndCountAll({
     include: [
       {
         model: User,
         as: "user",
       },
     ],
+    where: condition,
+
     order: [["createdAt", "DESC"]],
+    limit: limit,
+    offset: offset,
   })
     .then((data) => {
       res.send(data);
@@ -57,40 +70,6 @@ exports.findOne = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({ message: err.message || `Error retrieving Board with id=${id}` });
-    });
-};
-
-exports.findByTitle = (req, res) => {
-  const title = req.params.title;
-  Board.findOne({ where: { title: title } })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message || "Some error occurred retrieving boards." });
-    });
-};
-
-exports.findAllByTitle = (req, res) => {
-  const title = req.params.title;
-  Board.findAll({
-    include: [
-      {
-        model: User,
-        as: "user",
-      },
-    ],
-    where: {
-      title: {
-        [Op.like]: "%" + title + "%",
-      },
-    },
-  })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err.message || "Some error occurred retrieving boards." });
     });
 };
 

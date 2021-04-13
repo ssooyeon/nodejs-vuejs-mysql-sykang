@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class UserService {
-  getAll() {
-    return http.get("/boards");
+  getAll(params) {
+    return http.get("/boards", { params });
   }
 
   get(id) {
@@ -23,14 +23,6 @@ class UserService {
 
   deleteAll() {
     return http.delete("/boards");
-  }
-
-  findByTitle(title) {
-    return http.get(`/boards/title/${title}`);
-  }
-
-  findAllByTitle(title) {
-    return http.get(`/boards/all/title/${title}`);
   }
 }
 
