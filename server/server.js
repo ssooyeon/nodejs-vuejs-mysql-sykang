@@ -25,7 +25,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome :) ❤" });
 });
 
-require("./routes/tutorial.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/monitoring.routes")(app);
 require("./routes/board.routes")(app);

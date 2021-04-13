@@ -1,10 +1,6 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 import Dashboard from "@/pages/Dashboard.vue";
-import UserProfileView from "@/pages/UserProfile/UserProfileView.vue";
 import UserTableView from "@/pages/Table/UserTableView.vue";
-// import TutorialListView from "@/pages/TableList/TutorialListView.vue";
-// import AddTutorialView from "@/pages/TableList/AddTutorialView.vue";
-// import EditTutorialView from "@/pages/TableList/EditTutorialView.vue";
 import BoardView from "@/pages/Board/BoardView.vue";
 import AddBoardView from "@/pages/Board/AddBoardView.vue";
 import EditBoardView from "@/pages/Board/EditBoardView.vue";
@@ -24,11 +20,6 @@ const routes = [
         path: "dashboard",
         name: "dashboard",
         component: Dashboard,
-      },
-      {
-        path: "user",
-        name: "user-profile",
-        component: UserProfileView,
       },
       {
         path: "board",
@@ -55,21 +46,6 @@ const routes = [
         name: "user-list",
         component: UserTableView,
       },
-      // {
-      //   path: "table",
-      //   name: "tutorial-list",
-      //   component: TutorialListView,
-      // },
-      // {
-      //   path: "/table/add-tutorial",
-      //   name: "add-tutorial",
-      //   component: AddTutorialView,
-      // },
-      // {
-      //   path: "/table/tutorials/:id",
-      //   name: "tutorial-details",
-      //   component: EditTutorialView,
-      // },
       {
         path: "/myprofile",
         name: "my-profile",
