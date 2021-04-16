@@ -1,6 +1,7 @@
 const db = require("../models");
 const Board = db.boards;
 const User = db.users;
+const Log = db.logs;
 const Op = db.Sequelize.Op;
 
 const getPagination = (page, size) => {
@@ -20,9 +21,11 @@ exports.create = (req, res) => {
   const board = req.body;
   Board.create(board)
     .then((data) => {
+      Log.create({ status: "SUCCESS", message: `Board create successfully. New board title is: ${req.body.title}` });
       res.send(data);
     })
     .catch((err) => {
+      Log.create({ status: "ERROR", message: `Board create failed. Board title is: ${req.body.title}` });
       res.status(500).send({ message: err.message || "Some error occurred while creating the Board." });
     });
 };
@@ -44,8 +47,8 @@ exports.findAll = (req, res) => {
     where: condition,
 
     order: [["createdAt", "DESC"]],
-    limit: limit,
     offset: offset,
+    limit: limit,
   })
     .then((data) => {
       res.send(data);
@@ -80,13 +83,11 @@ exports.update = (req, res) => {
   const id = req.params.id;
   Board.update(req.body, { where: { id: id } })
     .then((num) => {
-      if (num === 1) {
-        res.send({ message: "Board was updated successfully." });
-      } else {
-        res.send({ message: `Cannot update Board with id=${id}. Maybe Board was not found or req.body is empty.` });
-      }
+      Log.create({ status: "SUCCESS", message: `Board update successfully. New board title is: ${req.body.title}` });
+      res.send({ message: "Board was updated successfully." });
     })
     .catch((err) => {
+      Log.create({ status: "ERROR", message: `Board update failed. Board title is: ${req.body.title}` });
       res.status(500).send({ message: err.message || `Error updating Board with id=${id}` });
     });
 };
@@ -99,12 +100,14 @@ exports.delete = (req, res) => {
   Board.destroy({ where: { id: id } })
     .then((num) => {
       if (num === 1) {
+        Log.create({ status: "SUCCESS", message: `Board delete successfully. New board id is: ${id}` });
         res.send({ message: "Board was deleted successfully." });
       } else {
         res.send({ message: `Cannot delete Board with id=${id}. maybe Board was not found.` });
       }
     })
     .catch((err) => {
+      Log.create({ status: "ERROR", message: `Board delete failed. Board id is: ${id}` });
       res.status(500).send({ message: err.message || `Could not delete Board with id=${id}` });
     });
 };
@@ -112,9 +115,11 @@ exports.delete = (req, res) => {
 exports.deleteAll = (req, res) => {
   Board.destroy({ where: {}, truncate: false })
     .then((nums) => {
+      Log.create({ status: "SUCCESS", message: "All boards delete successfully." });
       res.send({ message: `${nums} Boards were deleted successfully.` });
     })
     .catch((err) => {
+      Log.create({ status: "ERROR", message: "All boards delete failed" });
       res.status(500).send({ message: err.message || "Some error occurred while deleting all boards." });
     });
 };

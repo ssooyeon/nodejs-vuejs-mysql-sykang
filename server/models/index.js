@@ -17,6 +17,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.users = require("./user.model")(sequelize, Sequelize);
 db.boards = require("./board.model")(sequelize, Sequelize);
+db.logs = require("./log.model")(sequelize, Sequelize);
 
 db.users.hasMany(db.boards, { as: "boards" });
 db.boards.belongsTo(db.users, {

@@ -1,5 +1,6 @@
 const db = require("../models");
 const User = db.users;
+const Log = db.logs;
 const Op = db.Sequelize.Op;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -9,7 +10,7 @@ const jwt = require("jsonwebtoken");
 //////////////////////////////////
 exports.create = (req, res) => {
   if (!req.body.account) {
-    res.status(400).send({ message: "Content cannot be empty." });
+    res.status(400).send({ message: "Account cannot be empty." });
     return;
   }
   const salt = bcrypt.genSaltSync(10);
@@ -21,9 +22,11 @@ exports.create = (req, res) => {
   };
   User.create(user)
     .then((data) => {
+      Log.create({ status: "SUCCESS", message: `User create successfully. New user account is: ${req.body.account}` });
       res.send(data);
     })
     .catch((err) => {
+      Log.create({ status: "ERROR", message: `User create failed. User is: ${req.body.account}` });
       res.status(500).send({ message: err.message || "Some error occurred while creating the User." });
     });
 };
@@ -90,13 +93,11 @@ exports.update = (req, res) => {
   }
   User.update(req.body, { where: { id: id } })
     .then((num) => {
-      if (num === 1) {
-        res.send({ message: "User was updated successfully." });
-      } else {
-        res.send({ message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty.` });
-      }
+      Log.create({ status: "SUCCESS", message: `User update successfully. User account is: ${req.body.account}` });
+      res.send({ message: "User was updated successfully." });
     })
     .catch((err) => {
+      Log.create({ status: "ERROR", message: `User update failed. User account is: ${req.body.account}` });
       res.status(500).send({ message: err.message || `Error updating User with id=${id}` });
     });
 };
@@ -109,8 +110,10 @@ exports.delete = (req, res) => {
   User.destroy({ where: { id: id } })
     .then((num) => {
       if (num === 1) {
+        Log.create({ status: "SUCCESS", message: `User delete successfully. User id is: ${id}` });
         res.send({ message: "User was deleted successfully." });
       } else {
+        Log.create({ status: "ERROR", message: `User delete failed. User id is: ${id}` });
         res.send({ message: `Cannot delete User with id=${id}. maybe User was not found.` });
       }
     })
@@ -122,9 +125,11 @@ exports.delete = (req, res) => {
 exports.deleteAll = (req, res) => {
   User.destroy({ where: {}, truncate: false })
     .then((nums) => {
+      Log.create({ status: "SUCCESS", message: "All users delete successfully." });
       res.send({ message: `${nums} Users were deleted successfully.` });
     })
     .catch((err) => {
+      Log.create({ status: "ERROR", message: "All users delete failed." });
       res.status(500).send({ message: err.message || "Some error occurred while deleting all users." });
     });
 };
@@ -146,6 +151,7 @@ exports.authLogin = (req, res) => {
             email: data.email,
           };
           const token = jwt.sign({ userInfo }, "the_secret_key");
+          Log.create({ status: "SUCCESS", message: `User login successfully. User account is: ${account}` });
           res.json({
             token,
             id: userInfo.id,
@@ -153,6 +159,7 @@ exports.authLogin = (req, res) => {
             email: userInfo.email,
           });
         } else {
+          Log.create({ status: "ERROR", message: `User login failed. User account is: ${account}` });
           res.json(null);
         }
       })

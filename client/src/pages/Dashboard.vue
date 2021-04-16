@@ -118,12 +118,33 @@
           </template>
         </stats-card>
       </div>
+
+      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-custom-100">
+        <v-list>
+          <v-list-item-group mandatory color="indigo">
+            <v-list-item v-for="(item, i) in logs" :key="i">
+              <v-list-item-icon>
+                <v-icon v-if="item.status === 'BASIC'" class="mr-1">mdi-check</v-icon>
+                <v-icon v-else-if="item.status === 'SUCCESS'" class="mr-1 success">mdi-check</v-icon>
+                <v-icon v-else class="mr-1 error">mdi-close</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.message"></v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action>
+                <p v-text="item.createdAt"></p>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import MonitoringService from "../services/MonitoringService";
+  import LogSerivce from "../services/LogService";
   import { StatsCard, LineChartCard } from "@/components";
 
   export default {
@@ -131,8 +152,18 @@
       StatsCard,
       LineChartCard,
     },
+    created() {
+      this.updateCpuDataSet(this.cpuChart);
+      this.updateMemDataSet(this.memChart);
+      this.updateDiskDataSet(this.diskChart);
+      this.updateCPUSpeed();
+      this.updateMemFreeSpace();
+      this.updateDiskFreeSpace();
+      this.updateLogs();
+    },
     data() {
       return {
+        // system monitoring with text
         cpuPerCentage: 0,
         cpuSpeed: {
           value: 0,
@@ -148,6 +179,7 @@
           value: 0,
           unit: "",
         },
+        // system monitoring with chart
         defaultOptions: {
           maintainAspectRatio: false,
           events: ["click"],
@@ -220,6 +252,8 @@
             ],
           },
         },
+        // log monitoirng
+        logs: [],
       };
     },
     methods: {
@@ -340,14 +374,16 @@
           1000
         );
       },
-    },
-    mounted() {
-      this.updateCpuDataSet(this.cpuChart);
-      this.updateMemDataSet(this.memChart);
-      this.updateDiskDataSet(this.diskChart);
-      this.updateCPUSpeed();
-      this.updateMemFreeSpace();
-      this.updateDiskFreeSpace();
+      updateLogs() {
+        LogSerivce.getAll()
+          .then((res) => {
+            this.logs = res.data;
+            console.log(this.logs);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
     },
   };
 </script>
@@ -371,5 +407,14 @@
 <style>
   .md-card-stats.none-header .md-card-header {
     display: none;
+  }
+  .v-list-item__action {
+    height: 20px;
+  }
+  .v-icon.success {
+    color: green !important;
+  }
+  .v-icon.error {
+    color: red !important;
   }
 </style>
