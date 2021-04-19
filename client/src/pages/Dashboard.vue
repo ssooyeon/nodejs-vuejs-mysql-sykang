@@ -132,7 +132,8 @@
                 <v-list-item-title v-text="item.message"></v-list-item-title>
               </v-list-item-content>
               <v-list-item-action>
-                <p v-text="item.createdAt"></p>
+                <p v-if="isSameDay(item.createdAt)">Just today</p>
+                <p v-else v-text="$moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss')"></p>
               </v-list-item-action>
             </v-list-item>
           </v-list-item-group>
@@ -375,14 +376,27 @@
         );
       },
       updateLogs() {
+        this.getLogs();
+        setInterval(
+          function() {
+            this.getLogs();
+          }.bind(this),
+          10000
+        );
+      },
+      getLogs() {
         LogSerivce.getAll()
           .then((res) => {
             this.logs = res.data;
-            console.log(this.logs);
           })
           .catch((e) => {
             console.log(e);
           });
+      },
+      isSameDay(createdAt) {
+        const createdDay = new Date(createdAt).getDay();
+        const toDay = new Date().getDay();
+        return createdDay === toDay;
       },
     },
   };

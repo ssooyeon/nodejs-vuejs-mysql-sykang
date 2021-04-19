@@ -21,7 +21,7 @@
           <template slot="footer">
             <div class="stats">
               <md-icon>update</md-icon>
-              {{ $moment(currentBoard.createdAt, "YYYY-MM-DD HH:mm:ss") }} updated
+              {{ $moment(currentBoard.createdAt).format("YYYY-MM-DD HH:mm:ss") }} updated
             </div>
           </template>
         </stats-card>

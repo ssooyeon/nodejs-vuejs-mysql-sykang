@@ -91,7 +91,7 @@
           id: board.id,
           title: board.title.length > 30 ? board.title.substr(0, 30) + "..." : board.title,
           content: board.content.length > 200 ? board.content.substr(0, 200) + "..." : board.content,
-          createdAt: this.$moment(board.createdAt, "YYYY-MM-DD HH:mm:ss"),
+          createdAt: this.$moment(board.createdAt).format("YYYY-MM-DD HH:mm:ss"),
           writer: board.user.account,
         };
       },
