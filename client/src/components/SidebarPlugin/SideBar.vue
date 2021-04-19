@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar" :data-color="sidebarItemColor" :data-image="sidebarBackgroundImage" :style="sidebarStyle">
     <div class="logo">
-      <a href="" target="_blank" class="simple-text logo-normal">
+      <a href="/" class="simple-text logo-normal">
         {{ title }}
       </a>
     </div>

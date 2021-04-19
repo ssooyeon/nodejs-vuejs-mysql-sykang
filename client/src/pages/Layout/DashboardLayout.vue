@@ -11,7 +11,7 @@
       </sidebar-link>
       <sidebar-link to="/table">
         <md-icon>list</md-icon>
-        <p>Table list</p>
+        <p>User list</p>
       </sidebar-link>
       <sidebar-link v-if="user" to="/myProfile">
         <md-icon>person</md-icon>

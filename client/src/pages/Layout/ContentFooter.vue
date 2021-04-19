@@ -4,19 +4,14 @@
       <nav>
         <ul>
           <li>
-            <a href="">
-              About Us
-            </a>
-          </li>
-          <li>
-            <a href="https://www.creative-tim.com/license">
+            <a href="https://www.creative-tim.com/license" target="_blank">
               Licenses
             </a>
           </li>
         </ul>
       </nav>
       <div class="copyright text-center">
-        &copy; {{ new Date().getFullYear() }} <a href="https://www.creative-tim.com/?ref=mdf-vuejs" target="_blank">sykang</a>,
+        &copy; {{ new Date().getFullYear() }} <a href="https://github.com/ssooyeon/nodejs-vuejs-mysql-sykang" target="_blank">sykang</a>,
         <i class="fa fa-heart heart"></i> 🙌🙌
       </div>
     </div>
