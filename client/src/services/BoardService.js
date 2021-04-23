@@ -1,6 +1,6 @@
 import http from "../http-common";
 
-class UserService {
+class BoardService {
   getAll(params) {
     return http.get("/boards", { params });
   }
@@ -26,4 +26,4 @@ class UserService {
   }
 }
 
-export default new UserService();
+export default new BoardService();
