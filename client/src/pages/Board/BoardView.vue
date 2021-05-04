@@ -70,7 +70,9 @@
       this.initialize();
     },
     methods: {
+      // 게시판 목록 설정
       initialize() {
+        // 페이징을 위한 파라미터
         const params = this.getReqParams(this.search, this.currentPage, this.pageSize);
         BoardService.getAll(params)
           .then((res) => {
@@ -86,6 +88,7 @@
             console.log(e);
           });
       },
+      // 게시판 목록을 표출할 때 custom하여 표출
       getDisplayBoard(board) {
         return {
           id: board.id,
@@ -95,16 +98,20 @@
           writer: board.user.account,
         };
       },
+      // 게시판 생성 페이지로 이동
       viewAdd() {
         this.$router.push("/board/add");
       },
+      // 게시판 상세보기 페이지로 이동
       viewDetail(id) {
         this.$router.push(`/board/${id}`);
       },
+      // 페이징 번호가 변경될 때 현재 페이지를 업데이트하고, 게시판 목록을 업데이트
       handlePageChange(value) {
         this.currentPage = value;
         this.initialize();
       },
+      // 페이징을 위한 파리미터 가져오기
       getReqParams(searchTitle, page, pageSize) {
         let params = {};
         if (searchTitle) {

@@ -61,6 +61,7 @@
       validate() {
         return this.$refs.form.validate();
       },
+      // 계정 중복확인
       checkAccount() {
         const account = this.user.account;
         if (account !== "") {
@@ -68,19 +69,21 @@
             .then((res) => {
               const result = res.data;
               if (result !== "") {
+                // 이미 존재하는 계정
                 this.$fire({
                   title: "",
                   text: "This account already exist.",
                   type: "error",
                 });
               } else {
+                // 사용 가능한 계정
                 this.$fire({
                   title: "",
                   text: "This account is available.",
                   type: "success",
                 });
-                this.isValidAccount = true;
-                this.checkDoneAccount = this.user.account;
+                this.isValidAccount = true; // 계정 중복확인 완료 여부
+                this.checkDoneAccount = this.user.account; // 중복확인을 완료한 계정명
               }
             })
             .catch((e) => {
@@ -88,9 +91,11 @@
             });
         }
       },
+      // 회원가입 수행
       register() {
         const validForm = this.validate();
         if (validForm) {
+          // 중복확인을 완료한 계정명과 input 값이 일치하면
           if (this.checkDoneAccount === this.user.account) {
             var data = {
               account: this.user.account,
@@ -105,6 +110,7 @@
                   type: "success",
                   timer: 3000,
                 }).then(() => {
+                  // parent(LoginView)에게 회원가입 완료를 알림
                   this.$emit("registerDone", true);
                 });
               })

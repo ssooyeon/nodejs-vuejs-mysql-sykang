@@ -70,7 +70,7 @@
   export default {
     name: "my-profile",
     computed: {
-      ...mapState("userStore", ["user"]),
+      ...mapState("userStore", ["user"]), // store에 저장된 현재 사용자 정보를 가져옴
     },
     mounted() {
       this.userForm.id = this.user.data.id;
@@ -92,15 +92,18 @@
     },
     methods: {
       ...mapActions({ updateUserState: "userStore/updateUserState" }),
+      // 비밀번호를 변경할지 말지
       togglePasswordDiv() {
         this.isPasswordChange = !this.isPasswordChange;
       },
       validate() {
         return this.$refs.form.validate();
       },
+      // 현재 비밀번호 일치 여부 확인
       comparePassword() {
         const validForm = this.validate();
         if (validForm) {
+          // 비밀번호 변경 화면이 표출되어 있을 때
           if (this.isPasswordChange) {
             const comparePassword = {
               id: this.userForm.id,
@@ -108,6 +111,7 @@
             };
             UserService.compareCurrentPassword(comparePassword)
               .then((compare) => {
+                // 현재 비밀번호와 input 값이 일치하면 업데이트 수행
                 if (compare.data) {
                   const data = {
                     id: this.userForm.id,
@@ -128,6 +132,7 @@
                 console.log(e);
               });
           } else {
+            // 비밀번호 변경 화면이 표출되어 있지 않으면 email만 업데이트
             const data = {
               id: this.userForm.id,
               account: this.userForm.account,
@@ -137,6 +142,7 @@
           }
         }
       },
+      // 회원정보 수정 수행
       edit(data) {
         UserService.update(data.id, data)
           .then(() => {
@@ -146,6 +152,7 @@
               type: "success",
               timer: 3000,
             }).then(() => {
+              // store에 있는 currentUser의 정보를 업데이트
               this.updateUserState(data);
               this.$router.push("/");
             });

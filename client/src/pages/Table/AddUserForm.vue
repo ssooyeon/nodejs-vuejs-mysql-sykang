@@ -46,8 +46,8 @@
           email: "",
           password: "",
         },
-        checkDoneAccount: "",
-        isValidAccount: false,
+        checkDoneAccount: "", // 중복확인을 완료한 계정명
+        isValidAccount: false, // 중복확인 수행 여부
       };
     },
     props: {
@@ -61,6 +61,7 @@
       },
     },
     methods: {
+      // 계정 중복확인
       checkAccount() {
         const account = this.userForm.account;
         if (account !== "") {
@@ -91,6 +92,7 @@
       validate() {
         return this.$refs.form.validate();
       },
+      // 사용자 정보 저장
       save() {
         const validForm = this.validate();
         if (validForm) {

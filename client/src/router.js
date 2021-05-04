@@ -50,6 +50,7 @@ const routes = [
         path: "/myprofile",
         name: "my-profile",
         component: MyProfile,
+        // 라우터에 들어가기 전 로그인이 되어있지 않으면 로그인 페이지로 이동
         beforeEnter: (to, from, next) => {
           console.log(store.state.userStore);
           if (store.state.userStore.user !== "") {

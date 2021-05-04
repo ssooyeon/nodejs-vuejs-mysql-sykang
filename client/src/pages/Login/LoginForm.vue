@@ -18,7 +18,7 @@
   export default {
     name: "login-form",
     computed: {
-      ...mapState("userStore", ["errorMessage"]),
+      ...mapState("userStore", ["errorMessage"]), // store에 저장된 현재 에러 메세지를 가져옴
     },
     data() {
       return {
@@ -29,10 +29,11 @@
       };
     },
     methods: {
-      ...mapActions({ authLogin: "userStore/login" }),
+      ...mapActions({ authLogin: "userStore/login" }), // store에 저장된 로그인 액션을 가져옴
       validate() {
         return this.$refs.form.validate();
       },
+      // 로그인 수행
       login() {
         const valid = this.validate();
         if (valid) {
@@ -42,6 +43,7 @@
           };
           this.authLogin(data)
             .then(() => {
+              // 로그인 성공
               if (this.errorMessage === "") {
                 console.log("Welcome to my project!");
                 this.$router.push("/");

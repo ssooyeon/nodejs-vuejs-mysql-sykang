@@ -65,7 +65,7 @@
 
   export default {
     computed: {
-      ...mapState("userStore", ["user"]),
+      ...mapState("userStore", ["user"]), // store에 저장된 현재 사용자 정보를 가져옴
     },
     data() {
       return {
@@ -74,7 +74,7 @@
       };
     },
     methods: {
-      ...mapActions({ logout: "userStore/logout" }),
+      ...mapActions({ logout: "userStore/logout" }), // store에 저장된 액션을 가져옴
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
       },

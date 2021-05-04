@@ -57,6 +57,7 @@
       this.initialize(this.$route.params.id);
     },
     methods: {
+      // 게시판 수정 설정
       initialize(id) {
         BoardService.get(id)
           .then((res) => {
@@ -73,6 +74,7 @@
       validate() {
         return this.$refs.form.validate();
       },
+      // 게시판 수정
       save() {
         const validForm = this.validate();
         if (validForm) {

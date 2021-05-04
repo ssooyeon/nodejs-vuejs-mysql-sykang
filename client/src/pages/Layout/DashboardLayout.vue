@@ -41,7 +41,7 @@
       ContentFooter,
     },
     computed: {
-      ...mapState("userStore", ["user"]),
+      ...mapState("userStore", ["user"]), // store에 저장된 현재 사용자 정보를 가져옴
     },
     data() {
       return {

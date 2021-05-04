@@ -45,7 +45,7 @@
   export default {
     name: "add-board",
     computed: {
-      ...mapState("userStore", ["user"]),
+      ...mapState("userStore", ["user"]), // store에 저장된 현재 사용자 정보를 가져옴
     },
     data() {
       return {
@@ -59,6 +59,7 @@
       validate() {
         return this.$refs.form.validate();
       },
+      // 게시판 저장
       save() {
         const validForm = this.validate();
         if (validForm) {

@@ -85,9 +85,11 @@
       },
     },
     methods: {
+      // 비밀번호 변경 화면 show/hide
       togglePasswordDiv() {
         this.isPasswordChange = !this.isPasswordChange;
       },
+      // 사용자 정보 조회
       initialize() {
         UserService.get(this.editId)
           .then((res) => {
@@ -102,10 +104,12 @@
       validate() {
         return this.$refs.form.validate();
       },
+      // 사용자 수정
       save() {
         const valid = this.validate();
         if (valid) {
           let data = [];
+          // 비밀번호 변경 화면이 표출되어 있으면 파라미터에 비밀번호를 함께 전송
           if (this.isPasswordChange) {
             data = {
               id: this.userForm.id,
@@ -114,6 +118,7 @@
               password: this.userForm.newPassword,
             };
           } else {
+            // 비밀번호 변경 화면이 표출되어 있지 않으면 파라미터에 이메일만 전송
             data = {
               id: this.userForm.id,
               account: this.userForm.account,

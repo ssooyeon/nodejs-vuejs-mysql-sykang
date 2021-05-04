@@ -56,6 +56,7 @@
       };
     },
     methods: {
+      // 게시판 상세보기 설정
       initialize(id) {
         BoardService.get(id)
           .then((res) => {
@@ -71,9 +72,11 @@
             console.log(e);
           });
       },
+      // 게시판 수정 페이지로 이동
       viewEdit(id) {
         this.$router.push(`/board/edit/${id}`);
       },
+      // 게시판 삭제
       deleteBoard(id) {
         this.$fire({
           title: "",
@@ -90,7 +93,7 @@
                     text: "Delete successfully.",
                     type: "success",
                   }).then(() => {
-                    this.back();
+                    this.back(); // 뒤로가기
                   });
                 })
                 .catch((e) => {

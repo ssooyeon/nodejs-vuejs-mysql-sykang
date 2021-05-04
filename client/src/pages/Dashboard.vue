@@ -164,7 +164,6 @@
     },
     data() {
       return {
-        // system monitoring with text
         cpuPerCentage: 0,
         cpuSpeed: {
           value: 0,
@@ -180,7 +179,7 @@
           value: 0,
           unit: "",
         },
-        // system monitoring with chart
+        // 차트 공통 기본 옵션: child로 보냄
         defaultOptions: {
           maintainAspectRatio: false,
           events: ["click"],
@@ -217,6 +216,7 @@
             display: false,
           },
         },
+        // cpuChart, memChart, diskChart의 datasets을 계산하여 child에 보냄
         cpuChart: {
           data: {
             datasets: [
@@ -253,11 +253,11 @@
             ],
           },
         },
-        // log monitoirng
         logs: [],
       };
     },
     methods: {
+      // cpu 사용량 조회 후 차트 업데이트
       updateCpuDataSet: function(chart) {
         setInterval(
           function() {
@@ -279,6 +279,7 @@
           1000
         );
       },
+      // 메모리 사용량 조회 후 차트 업데이트
       updateMemDataSet: function(chart) {
         setInterval(
           function() {
@@ -300,6 +301,7 @@
           1000
         );
       },
+      // 디스크 사용량 조회 후 차트 업데이트
       updateDiskDataSet: function(chart) {
         setInterval(
           function() {
@@ -321,6 +323,7 @@
           1000
         );
       },
+      // cpu 속도 조회 및 업데이트
       updateCPUSpeed: function() {
         setInterval(
           function() {
@@ -339,6 +342,7 @@
           1000
         );
       },
+      // 메모리 남은 용량 조회 및 업데이트
       updateMemFreeSpace: function() {
         setInterval(
           function() {
@@ -357,6 +361,7 @@
           1000
         );
       },
+      // 디스크 남은 용량 조회 및 업데이트
       updateDiskFreeSpace: function() {
         setInterval(
           function() {
@@ -375,6 +380,7 @@
           1000
         );
       },
+      // 로그 리스트 업데이트
       updateLogs() {
         this.getLogs();
         setInterval(
@@ -384,6 +390,7 @@
           10000
         );
       },
+      // 로그 리스트 조회
       getLogs() {
         LogSerivce.getAll()
           .then((res) => {
@@ -393,6 +400,8 @@
             console.log(e);
           });
       },
+      // 로그 리스트에서 오늘 날짜인 항목들 조회
+      // :로그 리스트에서 날짜에 "Just now" 표출을 위함
       isSameDay(createdAt) {
         const createdDay = new Date(createdAt).getDay();
         const toDay = new Date().getDay();

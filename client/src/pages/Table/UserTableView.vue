@@ -77,6 +77,7 @@
       return {
         addDialog: false,
         editDialog: false,
+        // 데이터 테이블 헤더 설정
         headers: [
           {
             text: "Id",
@@ -109,6 +110,7 @@
       this.initialize();
     },
     methods: {
+      // 사용자 목록 조회
       initialize() {
         UserService.getAll()
           .then((res) => {
@@ -118,25 +120,30 @@
             console.log(e);
           });
       },
+      // 테이블 검색
       filterText(value, search) {
         return value !== null && search !== null && typeof value === "string" && value.toString().indexOf(search) !== -1;
       },
+      // 사용자 추가 완료
       addItemDone(result) {
         if (result) {
           this.initialize();
           this.addDialogClose();
         }
       },
+      // 사용자 수정 버튼 클릭
       editItem(id) {
         this.editDialog = true;
         this.editId = id;
       },
+      // 사용자 수정 완료
       editItemDone(result) {
         if (result) {
           this.initialize();
           this.editDialogClose();
         }
       },
+      // 사용자 삭제
       deleteItem(id) {
         this.$fire({
           title: "",
@@ -146,7 +153,6 @@
         })
           .then((res) => {
             if (res.value) {
-              console.log(id);
               UserService.delete(id)
                 .then(() => {
                   this.$fire({
@@ -166,9 +172,11 @@
             console.log(e);
           });
       },
+      // 사용자 생성 모달 닫기
       addDialogClose() {
         this.addDialog = false;
       },
+      // 사용자 수정 모달 닫기
       editDialogClose() {
         this.editDialog = false;
       },

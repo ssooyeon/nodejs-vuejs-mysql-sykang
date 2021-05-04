@@ -46,9 +46,11 @@
       };
     },
     methods: {
+      // isLoginView=true면 로그인 폼 표출, false면 회원가입 폼 표출
       isLogin: function() {
         this.isLoginView = !this.isLoginView;
       },
+      // child(RegisterForm)에서 회원가입을 완료하면 결과를 받음
       setLoginView: function(isLoginView) {
         this.isLoginView = isLoginView;
       },
